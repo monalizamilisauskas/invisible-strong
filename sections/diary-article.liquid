@@ -26,13 +26,14 @@
   style="--diary-bg: {{ section.settings.background_color }};"
 >
   <header class="is-diary-article__hero">
+    {% render 'diary-butterflies', variant: 'flutter' %}
     <div class="is-diary-article__hero-inner">
       <a class="is-diary-article__back" href="{{ blog.url }}">
         <span aria-hidden="true">←</span> {{ section.settings.back_label }}
       </a>
       <p class="is-diary-eyebrow">{{ blog.title }}</p>
       <h1 class="is-diary-article__title">{{ article.title }}</h1>
-      <span class="is-diary-article__flourish" aria-hidden="true"></span>
+      <span class="is-diary-article__flourish">{% render 'diary-butterflies', variant: 'flourish' %}</span>
       <p class="is-diary-meta is-diary-meta--center">
         {%- if article.tags.size > 0 -%}
           <span class="is-diary-article__tag">{{ article.tags.first }}</span>
@@ -81,6 +82,7 @@
 
     {%- if question != blank -%}
       <aside class="is-diary-question" aria-label="{{ section.settings.question_eyebrow | escape }}">
+        {% render 'diary-butterflies' %}
         <p class="is-diary-eyebrow">{{ section.settings.question_eyebrow }}</p>
         <div class="is-diary-question__text">{{ question | newline_to_br }}</div>
         {%- if blog.comments_enabled? -%}
@@ -253,8 +255,11 @@
       linear-gradient(180deg, #efe7f5 0%, var(--diary-bg, #f7f2ec) 100%);
     padding: 36px 20px 56px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
   .is-diary-article__hero-inner {
+    position: relative;
     max-width: 760px;
     margin: 0 auto;
   }
@@ -264,10 +269,7 @@
   }
   .is-diary-article__flourish {
     display: block;
-    width: 72px;
-    height: 2px;
-    margin: 0 auto 20px;
-    background: linear-gradient(90deg, transparent, #c9a86a, transparent);
+    margin: 0 auto 18px;
   }
   .is-diary-article__tag {
     background: #f6efe2;
@@ -421,6 +423,7 @@
     margin: 2em 0 0.8em;
   }
   .is-diary-question {
+    position: relative;
     margin: 56px 0 0;
     padding: 34px 36px;
     background: #fff;

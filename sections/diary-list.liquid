@@ -10,12 +10,13 @@
   style="--diary-bg: {{ section.settings.background_color }};"
 >
   <header class="is-diary-hero">
+    {% render 'diary-butterflies', variant: 'flutter' %}
     <div class="is-diary-hero__inner">
       {%- if section.settings.eyebrow != blank -%}
         <p class="is-diary-eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
       <h1 class="is-diary-hero__title">{{ blog.title }}</h1>
-      <span class="is-diary-flourish" aria-hidden="true"></span>
+      <span class="is-diary-flourish">{% render 'diary-butterflies', variant: 'flourish' %}</span>
       {%- if section.settings.intro != blank -%}
         <div class="is-diary-hero__intro">{{ section.settings.intro }}</div>
       {%- endif -%}
@@ -144,8 +145,11 @@
       linear-gradient(180deg, #efe7f5 0%, var(--diary-bg, #f7f2ec) 100%);
     padding: 80px 20px 64px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
   .is-diary-hero__inner {
+    position: relative;
     max-width: 680px;
     margin: 0 auto;
   }
@@ -166,10 +170,7 @@
   }
   .is-diary-flourish {
     display: block;
-    width: 72px;
-    height: 2px;
-    margin: 22px auto 24px;
-    background: linear-gradient(90deg, transparent, #c9a86a, transparent);
+    margin: 18px auto 22px;
   }
   .is-diary-hero__intro {
     font-size: 19px;

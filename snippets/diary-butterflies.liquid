@@ -1,0 +1,144 @@
+{%- doc -%}
+  Decorative line-art butterflies for the Behind the Strength diary.
+  Purely decorative (aria-hidden).
+
+  @param {string} [variant] - 'flutter' (floating group for hero bands), 'flourish' (divider under a title) or 'corner' (single small butterfly). Defaults to 'corner'.
+{%- enddoc -%}
+
+{%- capture butterfly -%}
+  <svg viewBox="0 0 64 48" focusable="false" aria-hidden="true">
+    <g fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M31 23C25 8 8 3 6 13c-2 10 12 13 25 12z"/>
+      <path d="M33 23C39 8 56 3 58 13c2 10-12 13-25 12z"/>
+      <path d="M31 27c-10 0-18 7-15 14 3 6 12-1 15-10z"/>
+      <path d="M33 27c10 0 18 7 15 14-3 6-12-1-15-10z"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <path d="M32 15v24"/>
+      <path d="M32 15c-1-5-4-9-7-10"/>
+      <path d="M32 15c1-5 4-9 7-10"/>
+    </g>
+  </svg>
+{%- endcapture -%}
+
+{%- case variant -%}
+  {%- when 'flutter' -%}
+    <span class="is-butterflies" aria-hidden="true">
+      <span class="is-butterfly is-butterfly--a">{{ butterfly }}</span>
+      <span class="is-butterfly is-butterfly--b">{{ butterfly }}</span>
+      <span class="is-butterfly is-butterfly--c">{{ butterfly }}</span>
+    </span>
+  {%- when 'flourish' -%}
+    <span class="is-butterfly-flourish" aria-hidden="true">{{ butterfly }}</span>
+  {%- else -%}
+    <span class="is-butterfly-corner" aria-hidden="true">{{ butterfly }}</span>
+{%- endcase -%}
+
+{% stylesheet %}
+  .is-butterflies {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .is-butterfly {
+    position: absolute;
+    display: block;
+  }
+  .is-butterfly svg,
+  .is-butterfly-flourish svg,
+  .is-butterfly-corner svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .is-butterfly--a {
+    width: 64px;
+    top: 22%;
+    left: 9%;
+    color: #8e6bbf;
+    opacity: 0.55;
+    transform: rotate(-14deg);
+    animation: is-butterfly-float 9s ease-in-out infinite;
+  }
+  .is-butterfly--b {
+    width: 40px;
+    top: 58%;
+    left: 17%;
+    color: #c9a86a;
+    opacity: 0.6;
+    transform: rotate(10deg);
+    animation: is-butterfly-float 11s ease-in-out -3s infinite;
+  }
+  .is-butterfly--c {
+    width: 52px;
+    top: 30%;
+    right: 10%;
+    color: #a98bd3;
+    opacity: 0.5;
+    transform: rotate(16deg);
+    animation: is-butterfly-float 10s ease-in-out -6s infinite;
+  }
+  @keyframes is-butterfly-float {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 6px -10px;
+    }
+  }
+  .is-butterfly-flourish {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #c9a86a;
+  }
+  .is-butterfly-flourish::before,
+  .is-butterfly-flourish::after {
+    content: '';
+    width: 44px;
+    height: 1.5px;
+  }
+  .is-butterfly-flourish::before {
+    background: linear-gradient(90deg, transparent, #c9a86a);
+  }
+  .is-butterfly-flourish::after {
+    background: linear-gradient(90deg, #c9a86a, transparent);
+  }
+  .is-butterfly-flourish svg {
+    width: 30px;
+  }
+  .is-butterfly-corner {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 34px;
+    color: #c9a86a;
+    opacity: 0.8;
+    transform: rotate(12deg);
+    pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .is-butterfly--a {
+      width: 30px;
+      top: 34%;
+      left: auto;
+      right: 4%;
+    }
+    .is-butterfly--b {
+      display: none;
+    }
+    .is-butterfly--c {
+      width: 38px;
+      top: 7%;
+      right: 9%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .is-butterfly {
+      animation: none;
+    }
+  }
+{% endstylesheet %}
