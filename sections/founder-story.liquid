@@ -1,0 +1,297 @@
+{%- comment -%}
+  "Meet the founder" band for the home page.
+  Photo with an offset gold frame, eyebrow, heading, pull quote,
+  short text, signature and two buttons.
+{%- endcomment -%}
+
+<section class="is-founder" style="--founder-bg: {{ section.settings.background_color }};">
+  {% render 'diary-butterflies', variant: 'flutter' %}
+  <div class="is-founder__inner">
+    <div class="is-founder__photo">
+      <span class="is-founder__frame" aria-hidden="true"></span>
+      {%- if section.settings.image -%}
+        {{
+          section.settings.image
+          | image_url: width: 900
+          | image_tag: loading: 'lazy', sizes: '(min-width: 900px) 420px, 80vw', alt: section.settings.image_alt
+        }}
+      {%- else -%}
+        <span class="is-founder__placeholder">{{ section.settings.signature | slice: 0 }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="is-founder__body">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="is-founder__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="is-founder__title">{{ section.settings.heading }}</h2>
+
+      {%- if section.settings.quote != blank -%}
+        <blockquote class="is-founder__quote">{{ section.settings.quote }}</blockquote>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="is-founder__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.signature != blank -%}
+        <p class="is-founder__signature">— {{ section.settings.signature }}</p>
+      {%- endif -%}
+
+      <div class="is-founder__actions">
+        {%- if section.settings.button_label != blank -%}
+          <a class="is-founder__btn" href="{{ section.settings.button_link | default: '/pages/our-story' }}">
+            {{- section.settings.button_label -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank -%}
+          <a class="is-founder__link" href="{{ section.settings.link_url | default: '/blogs/behind-the-strength' }}">
+            {{- section.settings.link_label }} <span aria-hidden="true">→</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .is-founder {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 88px 20px;
+    color: #3a3a3a;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(201, 168, 106, 0.16), transparent 42%),
+      radial-gradient(circle at 90% 85%, rgba(142, 107, 191, 0.18), transparent 48%),
+      var(--founder-bg, #f5f0f7);
+  }
+  .is-founder * {
+    box-sizing: border-box;
+  }
+  .is-founder__inner {
+    position: relative;
+    max-width: 1040px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 72px;
+    align-items: center;
+  }
+  .is-founder__photo {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    justify-self: end;
+  }
+  .is-founder__frame {
+    position: absolute;
+    inset: 18px -18px -18px 18px;
+    border: 2px solid #c9a86a;
+    border-radius: 28px;
+  }
+  .is-founder__photo img,
+  .is-founder__placeholder {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(91, 63, 140, 0.18);
+  }
+  .is-founder__placeholder {
+    display: grid;
+    place-items: center;
+    background: #8e6bbf;
+    color: #fff;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 96px;
+  }
+  .is-founder__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 12px;
+  }
+  .is-founder__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(30px, 3.6vw, 44px);
+    line-height: 1.18;
+    color: #5b3f8c;
+    margin: 0 0 24px;
+  }
+  .is-founder__quote {
+    margin: 0 0 22px;
+    padding: 4px 0 4px 22px;
+    border-left: 3px solid #c9a86a;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: clamp(19px, 2vw, 23px);
+    line-height: 1.5;
+    color: #5b3f8c;
+  }
+  .is-founder__text {
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .is-founder__text p {
+    margin: 0 0 0.8em;
+  }
+  .is-founder__signature {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 22px;
+    color: #5b3f8c;
+    margin: 6px 0 28px;
+  }
+  .is-founder__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+  }
+  .is-founder__btn {
+    display: inline-block;
+    background: #8e6bbf;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .is-founder__btn:hover {
+    background: #5b3f8c;
+  }
+  .is-founder__link {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #5b3f8c;
+    text-decoration: none;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 2px;
+  }
+  @media (max-width: 860px) {
+    .is-founder {
+      padding: 60px 20px 68px;
+    }
+    .is-founder__inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .is-founder__photo {
+      justify-self: center;
+      max-width: 300px;
+    }
+    .is-founder__frame {
+      inset: 12px -12px -12px 12px;
+    }
+    .is-founder__body {
+      text-align: center;
+    }
+    .is-founder__quote {
+      border-left: 0;
+      padding: 22px 0 0;
+      background: linear-gradient(#c9a86a, #c9a86a) top center / 56px 2px no-repeat;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .is-founder__actions {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Founder story",
+  "tag": "div",
+  "class": "is-founder-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description (alt text)",
+      "default": "Monaliza, founder of Invisible Strong"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Meet the founder"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why I created Invisible Strong"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Highlighted quote"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Signature",
+      "default": "Monaliza"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read My Story"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Second link label",
+      "default": "Read the diary"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Second link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f0f7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Founder story"
+    }
+  ]
+}
+{% endschema %}
