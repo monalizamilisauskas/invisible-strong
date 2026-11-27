@@ -465,12 +465,13 @@
 
 <div
   id="Hero-{{ section.id }}"
-  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}{% if section.settings.mobile_media_above %} hero--mobile-media-above{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
     --hero-border-opacity: {{ section.settings.border_opacity }}%;
     --blur-opacity: {{ section.settings.reflection_opacity | divided_by: 100.0 }};
+    --hero-mobile-focus-x: {{ section.settings.mobile_focus_x | default: 50 }}%;
     {% if section.settings.section_height == 'custom' %}
       --hero-min-height: {{ section.settings.section_height_custom }}svh;
     {% elsif section.settings.section_height == "full-screen" %}
@@ -673,6 +674,35 @@
     .hero--stack-mobile .hero__media-grid {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(var(--hero-media-count-mobile, 1), calc(100% / var(--hero-media-count-mobile, 1)));
+    }
+  }
+
+  /* Mobile: show the image as a band on top and the text below it (no overlap) */
+  @media screen and (max-width: 749px) {
+    .hero--mobile-media-above {
+      min-height: 0;
+    }
+    .hero--mobile-media-above .hero__container {
+      min-height: 0;
+      padding-block-start: 0;
+      padding-block-end: 40px;
+    }
+    .hero--mobile-media-above .hero__media-grid {
+      position: relative;
+      inset: auto;
+      grid-row: 1;
+      height: 100vw;
+      max-height: 520px;
+    }
+    .hero--mobile-media-above .hero__media-grid .overlay {
+      display: none;
+    }
+    .hero--mobile-media-above .hero__media {
+      object-position: var(--hero-mobile-focus-x, 50%) top !important;
+    }
+    .hero--mobile-media-above .hero__content-wrapper {
+      grid-row: 2;
+      padding-block-start: 32px;
     }
   }
 
@@ -895,6 +925,25 @@
       "id": "stack_media_on_mobile",
       "label": "t:settings.stack_media_on_mobile",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_media_above",
+      "label": "Mobile: image above text",
+      "info": "On phones, shows the image as a band on top and the text below it, instead of text over the image.",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "mobile_focus_x",
+      "label": "Mobile: horizontal focus",
+      "info": "Which part of the image stays visible on phones (0 = left, 100 = right).",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ section.settings.mobile_media_above }}"
     },
     {
       "type": "checkbox",
