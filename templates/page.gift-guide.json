@@ -1,0 +1,115 @@
+{
+  "sections": {
+    "hero": {
+      "type": "soft-page",
+      "settings": {
+        "eyebrow": "Gift guide",
+        "heading": "Find the right gift",
+        "intro": "<p>Pieces made by a woman living with fibromyalgia — for the people who carry invisible pain, and for those who love them. Choose who you're shopping for.</p>",
+        "show_content": true,
+        "content_style": "reading",
+        "background_color": "#f7f2ec"
+      }
+    },
+    "guide": {
+      "type": "gift-guide",
+      "blocks": {
+        "mom": {
+          "type": "recipient",
+          "settings": {
+            "recipient": "Quiet strength",
+            "title": "For Mom",
+            "text": "For the mom who never let it show.",
+            "match": "To My Mom",
+            "button_label": "See the necklace"
+          }
+        },
+        "daughter": {
+          "type": "recipient",
+          "settings": {
+            "recipient": "I believe you",
+            "title": "For your Daughter",
+            "text": "Three words she needs to hear: I believe you.",
+            "product": "to-my-daughter-i-believe-you-necklace-shop-240024-8221",
+            "match": "To My Daughter",
+            "button_label": "See the necklace"
+          }
+        },
+        "sister": {
+          "type": "recipient",
+          "settings": {
+            "recipient": "Never alone",
+            "title": "For your Sister",
+            "text": "So she knows she'll never carry it alone.",
+            "match": "To My Sister",
+            "button_label": "See the necklace"
+          }
+        },
+        "friend": {
+          "type": "recipient",
+          "settings": {
+            "recipient": "Saved you a spoon",
+            "title": "For a Friend",
+            "text": "For the friend who always saves you a spoon.",
+            "match": "To My Friend",
+            "button_label": "See the necklace"
+          }
+        },
+        "yourself": {
+          "type": "recipient",
+          "settings": {
+            "recipient": "Self-love",
+            "title": "For yourself",
+            "text": "A quiet reminder of your own strength.",
+            "product": "invisible-strong-ribbon-necklace-shop-240024-2071",
+            "match": "Ribbon Necklace",
+            "button_label": "See the necklace"
+          }
+        }
+      },
+      "block_order": ["mom", "daughter", "sister", "friend", "yourself"],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "footer_link_label": "Not sure yet? Browse every piece",
+        "footer_link": "",
+        "background_color": "#f7f2ec"
+      }
+    },
+    "promise": {
+      "type": "trust-strip",
+      "blocks": {
+        "card": {
+          "type": "item",
+          "settings": {
+            "icon": "card",
+            "title": "A heartfelt message card",
+            "text": "With every necklace, ready to give"
+          }
+        },
+        "box": {
+          "type": "item",
+          "settings": {
+            "icon": "gift",
+            "title": "Gift-ready box",
+            "text": "No wrapping needed"
+          }
+        },
+        "ship": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free US shipping",
+            "text": "On orders $95+ · 5–10 business days"
+          }
+        }
+      },
+      "block_order": ["card", "box", "ship"],
+      "settings": {
+        "style": "light",
+        "background_color": "#f7f2ec"
+      }
+    }
+  },
+  "order": ["hero", "guide", "promise"]
+}
