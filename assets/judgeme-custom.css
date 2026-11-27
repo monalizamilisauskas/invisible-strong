@@ -143,8 +143,8 @@ html body .jdgm-verified-badge {
   border-radius: 999px !important;
 }
 
-/* Links (read more, pagination) */
-html body .jdgm-review-widget a:not(.jdgm-write-rev-link):not(.jdgm-rev__pic-link) {
+/* Links (read more, pagination) — never the main buttons */
+html body .jdgm-review-widget a:not(.jdgm-write-rev-link):not(.jdgm-rev__pic-link):not([class*="write"]):not([class*="Write"]):not([class*="btn"]):not([class*="button"]):not([role="button"]) {
   color: #5b3f8c !important;
   text-decoration-color: #c9a86a !important;
 }
@@ -225,4 +225,45 @@ html body .jdgm-rev-widg__header .jdgm-star {
   html body .jdgm-rev-widg__reviews .jdgm-rev {
     margin: 0 !important;
   }
+}
+
+
+/* ---------- New Judge.me widget (2025+) ---------- */
+/* The new widget uses different class names: target buttons by pattern */
+html body .jdgm-review-widget :is(a, button):is([class*="write"], [class*="Write"], [class*="btn--primary"], [class*="button--primary"], [class*="primary"]),
+html body .jdgm-review-widget a[role="button"] {
+  background: #5b3f8c !important;
+  background-color: #5b3f8c !important;
+  border-color: #5b3f8c !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  font-family: var(--font-body--family, 'Lato', sans-serif) !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 12px 28px !important;
+  box-shadow: 0 6px 18px rgba(91, 63, 140, 0.18) !important;
+  text-decoration: none !important;
+}
+html body .jdgm-review-widget :is(a, button):is([class*="write"], [class*="Write"], [class*="primary"]) * {
+  color: #fff !important;
+}
+html body .jdgm-review-widget :is(a, button):is([class*="write"], [class*="Write"], [class*="primary"]):hover {
+  background: #4a2f75 !important;
+  background-color: #4a2f75 !important;
+}
+
+/* Our own heading replaces the app's "Customer Reviews" title */
+html body .is-soft-heading ~ .shopify-app-block .jdgm-review-widget :is(h1, h2) {
+  display: none !important;
+}
+
+/* Empty state ("Be the first to write a review") */
+html body .jdgm-review-widget {
+  text-align: center;
+}
+html body .jdgm-review-widget :is(p, div, span):is([class*="empty"], [class*="no-review"], [class*="noReview"]) {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
+  font-style: italic !important;
+  font-size: 20px !important;
+  color: #5b3f8c !important;
 }
