@@ -41,6 +41,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Capa_3.jpg",
+            "video": "shopify://files/videos/capa-3-video.mp4",
             "image_position": "30%",
             "mobile_focus_x": 65,
             "title": "Not fine,\nbut still here.",
