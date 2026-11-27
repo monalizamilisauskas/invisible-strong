@@ -53,7 +53,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Capa_4.jpg",
-            "image_position": "30%",
+            "image_position": "center",
             "mobile_focus_x": 65,
             "title": "A quiet reminder\nof your strength.",
             "text": "",
