@@ -8,9 +8,20 @@
         "read_label": "Read entry",
         "empty_text": "The first entry is coming soon.",
         "per_page": 10,
-        "background_color": "#f7f2ec"
+        "background_color": "#f7f2ec",
+        "author_image": "shopify://shop_images/Gemini_Generated_Image_mi3zlqmi3zlqmi3z.jpg",
+        "author_name": "Monaliza",
+        "author_line": "Founder · living with fibromyalgia",
+        "show_signup": true,
+        "signup_eyebrow": "The Spoon Diary",
+        "signup_heading": "Get new entries in your inbox",
+        "signup_text": "Gentle notes for low-spoon days, stories from our community and first access to new pieces. No spam — just support.",
+        "signup_button": "Join",
+        "signup_success": "Thank you for joining — see you in your inbox."
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

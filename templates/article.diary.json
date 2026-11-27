@@ -14,7 +14,9 @@
           }
         }
       },
-      "block_order": ["cta"],
+      "block_order": [
+        "cta"
+      ],
       "settings": {
         "back_label": "All entries",
         "show_image": true,
@@ -25,9 +27,16 @@
         "copy_label": "Copy link",
         "copied_label": "Link copied ✓",
         "comments_heading": "From our community",
-        "background_color": "#f7f2ec"
+        "background_color": "#f7f2ec",
+        "drop_cap": true,
+        "author_image": "shopify://shop_images/Gemini_Generated_Image_mi3zlqmi3zlqmi3z.jpg",
+        "author_signoff": "With love,",
+        "author_name": "Monaliza",
+        "author_bio": "I live with fibromyalgia and created Invisible Strong so people like us feel seen."
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

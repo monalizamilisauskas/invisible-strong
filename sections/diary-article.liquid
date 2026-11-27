@@ -25,23 +25,28 @@
   class="is-diary-article"
   style="--diary-bg: {{ section.settings.background_color }};"
 >
-  <div class="is-diary-article__inner">
-    <a class="is-diary-article__back" href="{{ blog.url }}">
-      <span aria-hidden="true">←</span> {{ section.settings.back_label }}
-    </a>
-
-    <header class="is-diary-article__header">
+  <header class="is-diary-article__hero">
+    <div class="is-diary-article__hero-inner">
+      <a class="is-diary-article__back" href="{{ blog.url }}">
+        <span aria-hidden="true">←</span> {{ section.settings.back_label }}
+      </a>
       <p class="is-diary-eyebrow">{{ blog.title }}</p>
       <h1 class="is-diary-article__title">{{ article.title }}</h1>
+      <span class="is-diary-article__flourish" aria-hidden="true"></span>
       <p class="is-diary-meta is-diary-meta--center">
+        {%- if article.tags.size > 0 -%}
+          <span class="is-diary-article__tag">{{ article.tags.first }}</span>
+        {%- endif -%}
         <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
           {{- article.published_at | date: '%B %-d, %Y' -}}
         </time>
         <span aria-hidden="true">·</span>
         <span>{{ minutes }} min read</span>
       </p>
-    </header>
+    </div>
+  </header>
 
+  <div class="is-diary-article__inner">
     {%- if article.image and section.settings.show_image -%}
       <figure class="is-diary-article__image">
         {{
@@ -52,9 +57,27 @@
       </figure>
     {%- endif -%}
 
-    <div class="is-diary-article__body">
+    <div class="is-diary-article__body{% if section.settings.drop_cap %} is-diary-article__body--dropcap{% endif %}">
       {{ article.content }}
     </div>
+
+    {%- if section.settings.author_name != blank -%}
+      <div class="is-diary-author">
+        <span class="is-diary-author__avatar">
+          {%- if section.settings.author_image -%}
+            {{ section.settings.author_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: section.settings.author_name }}
+          {%- else -%}
+            {{ section.settings.author_name | slice: 0 }}
+          {%- endif -%}
+        </span>
+        <div>
+          <p class="is-diary-author__name">{{ section.settings.author_signoff }} {{ section.settings.author_name }}</p>
+          {%- if section.settings.author_bio != blank -%}
+            <p class="is-diary-author__bio">{{ section.settings.author_bio }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
 
     {%- if question != blank -%}
       <aside class="is-diary-question" aria-label="{{ section.settings.question_eyebrow | escape }}">
@@ -220,8 +243,89 @@
     width: 100%;
     box-sizing: border-box;
     background: var(--diary-bg, #f7f2ec);
-    padding: 48px 20px 104px;
+    padding: 0 0 104px;
     color: #3a3a3a;
+  }
+  .is-diary-article__hero {
+    background:
+      radial-gradient(circle at 12% 25%, rgba(201, 168, 106, 0.18), transparent 45%),
+      radial-gradient(circle at 88% 10%, rgba(142, 107, 191, 0.22), transparent 50%),
+      linear-gradient(180deg, #efe7f5 0%, var(--diary-bg, #f7f2ec) 100%);
+    padding: 36px 20px 56px;
+    text-align: center;
+  }
+  .is-diary-article__hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .is-diary-article__hero .is-diary-article__back {
+    display: table;
+    margin: 0 0 40px;
+  }
+  .is-diary-article__flourish {
+    display: block;
+    width: 72px;
+    height: 2px;
+    margin: 0 auto 20px;
+    background: linear-gradient(90deg, transparent, #c9a86a, transparent);
+  }
+  .is-diary-article__tag {
+    background: #f6efe2;
+    color: #8a6a2e;
+    border: 1px solid #e6d5b3;
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 13px;
+    margin-right: 4px;
+  }
+  .is-diary-article__body--dropcap > p:first-child::first-letter {
+    float: left;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 4.1em;
+    line-height: 0.82;
+    padding: 0.08em 0.12em 0 0;
+    color: #8e6bbf;
+  }
+  .is-diary-author {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 48px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid #e4d8ee;
+  }
+  .is-diary-author__avatar {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: #8e6bbf;
+    color: #fff;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 28px;
+    border: 2px solid #c9a86a;
+  }
+  .is-diary-author__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-diary-author__name {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 22px;
+    color: #5b3f8c;
+    margin: 0 0 4px;
+  }
+  .is-diary-author__bio {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #6f6670;
+    margin: 0;
   }
   .is-diary-article * {
     box-sizing: border-box;
@@ -267,9 +371,8 @@
   .is-diary-article__back:hover {
     text-decoration: underline;
   }
-  .is-diary-article__header {
-    text-align: center;
-    margin: 0 0 48px;
+  .is-diary-article__inner {
+    padding: 40px 20px 0;
   }
   .is-diary-article__title {
     font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
@@ -277,7 +380,7 @@
     font-size: clamp(30px, 4.2vw, 44px);
     line-height: 1.25;
     color: #5b3f8c;
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     text-wrap: balance;
   }
   .is-diary-meta--center {
@@ -515,7 +618,13 @@
   }
   @media (max-width: 560px) {
     .is-diary-article {
-      padding: 32px 18px 80px;
+      padding: 0 0 80px;
+    }
+    .is-diary-article__hero {
+      padding: 24px 18px 40px;
+    }
+    .is-diary-article__inner {
+      padding: 28px 18px 0;
     }
     .is-diary-article__inner,
     .is-diary-article__body {
@@ -559,6 +668,39 @@
       "id": "show_image",
       "label": "Show featured image",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "drop_cap",
+      "label": "Decorative first letter",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Author"
+    },
+    {
+      "type": "image_picker",
+      "id": "author_image",
+      "label": "Author photo"
+    },
+    {
+      "type": "text",
+      "id": "author_signoff",
+      "label": "Sign-off",
+      "default": "With love,"
+    },
+    {
+      "type": "text",
+      "id": "author_name",
+      "label": "Author name",
+      "default": "Monaliza"
+    },
+    {
+      "type": "textarea",
+      "id": "author_bio",
+      "label": "Author bio",
+      "default": "I live with fibromyalgia and created Invisible Strong so people like us feel seen."
     },
     {
       "type": "header",

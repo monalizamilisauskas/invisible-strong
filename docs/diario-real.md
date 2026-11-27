@@ -25,7 +25,7 @@ O tempo de leitura e o trecho do card são calculados automaticamente.
    - Comentários: **Permitidos, aguardando moderação** (os leitores respondem à pergunta do relato)
    - Modelo de tema: **`diary`** › Salvar
 3. **Menu** — Conteúdo › Menus › **Main menu** › Adicionar item de menu
-   - Nome: `Behind the Strength` · Link: Blogs › Behind the Strength › Salvar
+   - Nome: `Blog` (claro para qualquer visitante; o título da página continua "Behind the Strength") · Link: Blogs › Behind the Strength › Salvar
 4. **Primeiro relato** — siga "Como publicar um novo dia" abaixo, usando o texto pronto no fim deste arquivo.
 
 ## Como publicar um novo dia
@@ -33,15 +33,18 @@ O tempo de leitura e o trecho do card são calculados automaticamente.
 Conteúdo › Posts do blog › **Adicionar post do blog**:
 
 1. **Título** — o título do dia.
-2. **Conteúdo** — o relato, um parágrafo por bloco. Para uma frase de destaque, use o botão de citação (fica em roxo, com a barra dourada).
+2. **Conteúdo** — o relato, um parágrafo por bloco. Para uma frase de destaque (ex.: "Come on, you can do this. Just one more day."), selecione-a e use o botão de **citação**: fica em roxo, com a barra dourada. A primeira letra do relato ganha destaque automático.
 3. **Pergunta final** — no fim da página, em *Metacampos* › **Diary question**: a mensagem de acolhimento + a pergunta. Se ficar vazio, aparece "How did your day begin today?".
-4. **Imagem em destaque** — opcional.
-5. Na lateral: **Blog** = `Behind the Strength`, **Modelo de tema** = `diary`, **Visibilidade** = Visível (ou agende uma data).
-6. Salvar.
+4. **Etiqueta do dia** — em *Tags*, escreva o humor do dia (ex.: `Low-spoon day`, `A gentle day`, `Flare day`, `Small win`). A primeira tag aparece como etiqueta dourada no card e no relato.
+5. **Imagem em destaque** — opcional. Sem foto, o card mostra a ilustração das colheres.
+6. Na lateral: **Blog** = `Behind the Strength`, **Modelo de tema** = `diary`, **Visibilidade** = Visível (ou agende uma data).
+7. Salvar.
 
 Dica: escreva em português, traduza para o inglês e cole a versão em inglês.
 
-## CTA e produto em destaque (editor de temas)
+## Foto, CTA e produto em destaque (editor de temas)
+
+A foto da autora já vem configurada com a sua foto da página inicial. Para trocar: Personalizar › modelo de blog **diary** (topo da listagem) e modelo de post de blog **diary** (quadro "With love, Monaliza").
 
 Loja virtual › Temas › Personalizar › escolha o modelo de post de blog **diary**. Na seção *Diary entry*:
 
@@ -58,7 +61,8 @@ Os dois blocos valem para todos os relatos.
 
 Just one more day: what no one sees before I get out of bed
 
-**Data de publicação:** 27/11/2026
+**Data de publicação:** 27/11/2026  
+**Tag:** Low-spoon day
 
 **Conteúdo**
 
@@ -74,7 +78,7 @@ In my head, it was a silent battle. On one side, a voice said: "Go back to bed."
 
 Some time later, there I was. Walking under a cloudy sky, repeating the same words to myself, step after step:
 
-"Come on, you can do this. Just one more day."
+"Come on, you can do this. Just one more day."  ← use o botão de citação nesta linha
 
 **Diary question (metacampo)**
 

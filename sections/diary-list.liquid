@@ -1,24 +1,43 @@
 {%- comment -%}
   Behind the Strength: listing page for the diary series.
-  Used by templates/blog.diary.json. Calm, single-column cards
-  with generous spacing for readers with visual fatigue.
+  Used by templates/blog.diary.json.
+  Warm hero with author, entry cards with image (or spoon illustration),
+  entry number, mood tag (first article tag) and a Spoon Diary signup.
 {%- endcomment -%}
 
 <section
   class="is-diary-list"
   style="--diary-bg: {{ section.settings.background_color }};"
 >
-  <div class="is-diary-list__inner">
-    <header class="is-diary-list__header">
+  <header class="is-diary-hero">
+    <div class="is-diary-hero__inner">
       {%- if section.settings.eyebrow != blank -%}
         <p class="is-diary-eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
-      <h1 class="is-diary-list__title">{{ blog.title }}</h1>
+      <h1 class="is-diary-hero__title">{{ blog.title }}</h1>
+      <span class="is-diary-flourish" aria-hidden="true"></span>
       {%- if section.settings.intro != blank -%}
-        <div class="is-diary-list__intro">{{ section.settings.intro }}</div>
+        <div class="is-diary-hero__intro">{{ section.settings.intro }}</div>
       {%- endif -%}
-    </header>
+      {%- if section.settings.author_name != blank -%}
+        <div class="is-diary-author-chip">
+          <span class="is-diary-avatar">
+            {%- if section.settings.author_image -%}
+              {{ section.settings.author_image | image_url: width: 160 | image_tag: loading: 'eager', alt: section.settings.author_name }}
+            {%- else -%}
+              {{ section.settings.author_name | slice: 0 }}
+            {%- endif -%}
+          </span>
+          <span>
+            <strong>{{ section.settings.author_name }}</strong>
+            {%- if section.settings.author_line != blank %}<br><span class="is-diary-author-chip__line">{{ section.settings.author_line }}</span>{% endif -%}
+          </span>
+        </div>
+      {%- endif -%}
+    </div>
+  </header>
 
+  <div class="is-diary-list__inner">
     {%- paginate blog.articles by section.settings.per_page -%}
       {%- if blog.articles.size > 0 -%}
         <ol class="is-diary-list__items" role="list">
@@ -30,23 +49,47 @@
                 assign minutes = 1
               endif
               if article.excerpt != blank
-                assign teaser = article.excerpt | strip_html | truncatewords: 32
+                assign teaser = article.excerpt | strip_html | truncatewords: 28
               else
-                assign teaser = article.content | strip_html | truncatewords: 32
+                assign teaser = article.content | strip_html | truncatewords: 28
+              endif
+              assign entry_number = blog.articles_count | minus: paginate.current_offset | minus: forloop.index0
+              assign is_featured = false
+              if forloop.first and paginate.current_page == 1
+                assign is_featured = true
               endif
             -%}
             <li>
-              <a class="is-diary-card" href="{{ article.url }}">
-                <p class="is-diary-meta">
-                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-                    {{- article.published_at | date: '%B %-d, %Y' -}}
-                  </time>
-                  <span aria-hidden="true">·</span>
-                  <span>{{ minutes }} min read</span>
-                </p>
-                <h2 class="is-diary-card__title">{{ article.title }}</h2>
-                <p class="is-diary-card__teaser">{{ teaser }}</p>
-                <span class="is-diary-card__cta">{{ section.settings.read_label }} <span aria-hidden="true">→</span></span>
+              <a class="is-diary-card{% if is_featured %} is-diary-card--featured{% endif %}" href="{{ article.url }}">
+                <span class="is-diary-card__media">
+                  {%- if article.image -%}
+                    {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: article.image.alt }}
+                  {%- else -%}
+                    <span class="is-diary-card__art" aria-hidden="true">
+                      <svg viewBox="0 0 120 120">
+                        <g fill="#8e6bbf"><path d="M38 14c-7 0-12 7-12 16 0 7 4 13 9 14v58a3 3 0 0 0 6 0V44c5-1 9-7 9-14 0-9-5-16-12-16z"/></g>
+                        <g fill="#c9a86a"><path d="M60 8c-7 0-12 7-12 16 0 7 4 13 9 14v64a3 3 0 0 0 6 0V38c5-1 9-7 9-14 0-9-5-16-12-16z"/></g>
+                        <g fill="#d9c9ec"><path d="M82 14c-7 0-12 7-12 16 0 7 4 13 9 14v58a3 3 0 0 0 6 0V44c5-1 9-7 9-14 0-9-5-16-12-16z"/></g>
+                      </svg>
+                    </span>
+                  {%- endif -%}
+                  <span class="is-diary-card__number">Entry {{ entry_number }}</span>
+                </span>
+                <span class="is-diary-card__body">
+                  <span class="is-diary-meta">
+                    {%- if article.tags.size > 0 -%}
+                      <span class="is-diary-tag">{{ article.tags.first }}</span>
+                    {%- endif -%}
+                    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                      {{- article.published_at | date: '%B %-d, %Y' -}}
+                    </time>
+                    <span aria-hidden="true">·</span>
+                    <span>{{ minutes }} min read</span>
+                  </span>
+                  <span class="is-diary-card__title">{{ article.title }}</span>
+                  <span class="is-diary-card__teaser">{{ teaser }}</span>
+                  <span class="is-diary-card__cta">{{ section.settings.read_label }} <span aria-hidden="true">→</span></span>
+                </span>
               </a>
             </li>
           {%- endfor -%}
@@ -61,6 +104,24 @@
         <p class="is-diary-list__empty">{{ section.settings.empty_text }}</p>
       {%- endif -%}
     {%- endpaginate -%}
+
+    {%- if section.settings.show_signup -%}
+      <aside class="is-diary-signup">
+        <p class="is-diary-eyebrow">{{ section.settings.signup_eyebrow }}</p>
+        <h2 class="is-diary-signup__title">{{ section.settings.signup_heading }}</h2>
+        <p class="is-diary-signup__text">{{ section.settings.signup_text }}</p>
+        {%- form 'customer', id: 'diary-signup', class: 'is-diary-signup__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter, diary">
+          {%- if form.posted_successfully? -%}
+            <p class="is-diary-signup__ok" role="status">{{ section.settings.signup_success }}</p>
+          {%- else -%}
+            <label class="visually-hidden" for="diary-signup-email">Email</label>
+            <input id="diary-signup-email" type="email" name="contact[email]" placeholder="Your email" autocomplete="email" required>
+            <button type="submit">{{ section.settings.signup_button }}</button>
+          {%- endif -%}
+        {%- endform -%}
+      </aside>
+    {%- endif -%}
   </div>
 </section>
 
@@ -70,19 +131,23 @@
     width: 100%;
     box-sizing: border-box;
     background: var(--diary-bg, #f7f2ec);
-    padding: 72px 20px 96px;
+    padding: 0 0 96px;
     color: #3a3a3a;
   }
   .is-diary-list * {
     box-sizing: border-box;
   }
-  .is-diary-list__inner {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .is-diary-list__header {
+  .is-diary-hero {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(201, 168, 106, 0.18), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(142, 107, 191, 0.22), transparent 50%),
+      linear-gradient(180deg, #efe7f5 0%, var(--diary-bg, #f7f2ec) 100%);
+    padding: 80px 20px 64px;
     text-align: center;
-    margin: 0 0 56px;
+  }
+  .is-diary-hero__inner {
+    max-width: 680px;
+    margin: 0 auto;
   }
   .is-diary-eyebrow {
     font-size: 13px;
@@ -91,22 +156,72 @@
     color: #8e6bbf;
     margin: 0 0 12px;
   }
-  .is-diary-list__title {
+  .is-diary-hero__title {
     font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
     font-weight: 400;
-    font-size: clamp(32px, 4.4vw, 48px);
-    line-height: 1.2;
+    font-size: clamp(36px, 5.4vw, 58px);
+    line-height: 1.15;
     color: #5b3f8c;
-    margin: 0 0 18px;
-  }
-  .is-diary-list__intro {
-    font-size: 18px;
-    line-height: 1.75;
-    max-width: 580px;
-    margin: 0 auto;
-  }
-  .is-diary-list__intro p {
     margin: 0;
+  }
+  .is-diary-flourish {
+    display: block;
+    width: 72px;
+    height: 2px;
+    margin: 22px auto 24px;
+    background: linear-gradient(90deg, transparent, #c9a86a, transparent);
+  }
+  .is-diary-hero__intro {
+    font-size: 19px;
+    line-height: 1.75;
+  }
+  .is-diary-hero__intro p {
+    margin: 0;
+  }
+  .is-diary-author-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+    padding: 10px 22px 10px 10px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 999px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.4;
+    box-shadow: 0 4px 18px rgba(91, 63, 140, 0.08);
+  }
+  .is-diary-author-chip strong {
+    color: #5b3f8c;
+  }
+  .is-diary-author-chip__line {
+    color: #6f6670;
+    font-size: 14px;
+  }
+  .is-diary-avatar {
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: #8e6bbf;
+    color: #fff;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 22px;
+    border: 2px solid #c9a86a;
+  }
+  .is-diary-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-diary-list__inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 24px 20px 0;
   }
   .is-diary-list__items {
     list-style: none;
@@ -117,48 +232,115 @@
     gap: 28px;
   }
   .is-diary-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
     background: #fff;
-    border-radius: 18px;
-    padding: 32px 34px 30px;
+    border-radius: 20px;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
-    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.07);
-    border-left: 3px solid #c9a86a;
+    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .is-diary-card--featured {
+    grid-template-columns: 1fr;
   }
   .is-diary-card:hover,
   .is-diary-card:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(91, 63, 140, 0.14);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(91, 63, 140, 0.16);
   }
   .is-diary-card:focus-visible {
     outline: 2px solid #8e6bbf;
     outline-offset: 3px;
   }
+  .is-diary-card__media {
+    position: relative;
+    display: block;
+    min-height: 220px;
+    background: linear-gradient(135deg, #efe7f5 0%, #f5ecdf 100%);
+  }
+  .is-diary-card--featured .is-diary-card__media {
+    aspect-ratio: 16 / 7;
+    min-height: 0;
+  }
+  .is-diary-card__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .is-diary-card__art {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .is-diary-card__art svg {
+    width: 110px;
+    height: 110px;
+    opacity: 0.9;
+  }
+  .is-diary-card--featured .is-diary-card__art svg {
+    width: 150px;
+    height: 150px;
+  }
+  .is-diary-card__number {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    background: #5b3f8c;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 999px;
+  }
+  .is-diary-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 30px 34px 30px;
+  }
+  .is-diary-card--featured .is-diary-card__body {
+    padding: 34px 40px 36px;
+  }
   .is-diary-meta {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
     font-size: 14px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     color: #6f6670;
     margin: 0;
   }
+  .is-diary-tag {
+    background: #f6efe2;
+    color: #8a6a2e;
+    border: 1px solid #e6d5b3;
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 13px;
+    margin-right: 4px;
+  }
   .is-diary-card__title {
+    display: block;
     font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
     font-weight: 400;
-    font-size: clamp(22px, 2.6vw, 27px);
+    font-size: clamp(22px, 2.6vw, 26px);
     line-height: 1.35;
     color: #5b3f8c;
-    margin: 0;
+  }
+  .is-diary-card--featured .is-diary-card__title {
+    font-size: clamp(26px, 3.4vw, 34px);
   }
   .is-diary-card__teaser {
+    display: block;
     font-size: 17px;
     line-height: 1.75;
-    margin: 0;
   }
   .is-diary-card__cta {
     align-self: flex-start;
@@ -183,15 +365,88 @@
     text-align: center;
     font-size: 18px;
   }
-  @media (max-width: 560px) {
-    .is-diary-list {
-      padding: 52px 16px 72px;
+  .is-diary-signup {
+    margin-top: 72px;
+    padding: 48px 36px;
+    text-align: center;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #5b3f8c 0%, #8e6bbf 100%);
+    color: #fff;
+  }
+  .is-diary-signup .is-diary-eyebrow {
+    color: #e8d3a6;
+  }
+  .is-diary-signup__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3.4vw, 34px);
+    margin: 0 0 10px;
+  }
+  .is-diary-signup__text {
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 26px;
+    opacity: 0.92;
+  }
+  .is-diary-signup__form {
+    display: flex;
+    gap: 10px;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .is-diary-signup__form input[type='email'] {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 16px;
+    padding: 13px 20px;
+    border: 0;
+    border-radius: 999px;
+    color: #3a3a3a;
+  }
+  .is-diary-signup__form button {
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    background: #c9a86a;
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 13px 26px;
+    cursor: pointer;
+  }
+  .is-diary-signup__form button:hover {
+    background: #b8955a;
+  }
+  .is-diary-signup__ok {
+    margin: 0 auto;
+    font-size: 17px;
+  }
+  @media (max-width: 640px) {
+    .is-diary-hero {
+      padding: 56px 18px 44px;
     }
-    .is-diary-list__header {
-      margin-bottom: 40px;
+    .is-diary-list__inner {
+      padding: 16px 16px 0;
     }
     .is-diary-card {
-      padding: 26px 22px 24px;
+      grid-template-columns: 1fr;
+    }
+    .is-diary-card__media,
+    .is-diary-card--featured .is-diary-card__media {
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+    }
+    .is-diary-card__body,
+    .is-diary-card--featured .is-diary-card__body {
+      padding: 24px 22px 26px;
+    }
+    .is-diary-signup {
+      padding: 40px 22px;
+    }
+    .is-diary-signup__form {
+      flex-direction: column;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -223,6 +478,35 @@
       "default": "<p>Short, honest notes from my everyday life with fibromyalgia — the parts no one sees.</p>"
     },
     {
+      "type": "header",
+      "content": "Author"
+    },
+    {
+      "type": "image_picker",
+      "id": "author_image",
+      "label": "Author photo"
+    },
+    {
+      "type": "text",
+      "id": "author_name",
+      "label": "Author name",
+      "default": "Monaliza"
+    },
+    {
+      "type": "text",
+      "id": "author_line",
+      "label": "Author line",
+      "default": "Founder · living with fibromyalgia"
+    },
+    {
+      "type": "header",
+      "content": "Entries"
+    },
+    {
+      "type": "paragraph",
+      "content": "The first tag of each entry is shown as a mood label (e.g. Low-spoon day). Entries without an image show a spoon illustration."
+    },
+    {
       "type": "text",
       "id": "read_label",
       "label": "Card link label",
@@ -242,6 +526,46 @@
       "max": 24,
       "step": 1,
       "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Spoon Diary signup"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signup",
+      "label": "Show signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "signup_eyebrow",
+      "label": "Eyebrow",
+      "default": "The Spoon Diary"
+    },
+    {
+      "type": "text",
+      "id": "signup_heading",
+      "label": "Heading",
+      "default": "Get new entries in your inbox"
+    },
+    {
+      "type": "textarea",
+      "id": "signup_text",
+      "label": "Text",
+      "default": "Gentle notes for low-spoon days, stories from our community and first access to new pieces. No spam — just support."
+    },
+    {
+      "type": "text",
+      "id": "signup_button",
+      "label": "Button label",
+      "default": "Join"
+    },
+    {
+      "type": "text",
+      "id": "signup_success",
+      "label": "Success message",
+      "default": "Thank you for joining — see you in your inbox."
     },
     {
       "type": "color",
