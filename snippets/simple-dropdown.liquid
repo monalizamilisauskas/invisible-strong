@@ -1,0 +1,115 @@
+{%- comment -%}
+  Desktop header: turns Horizon's full-width mega menu into a compact
+  dropdown list right below the parent link (e.g. "Shop").
+  - hides the full-width background band (header__underlay-open)
+  - the submenu box is placed under its parent link with JS (--dd-left),
+    because the menu list clips absolutely positioned children
+  Mobile (drawer menu) is not affected.
+{%- endcomment -%}
+
+<style>
+  @media screen and (min-width: 750px) {
+    .header__underlay-open,
+    .header__underlay-open::after {
+      display: none !important;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+      top: 100% !important;
+      clip-path: none !important;
+      padding-inline: 0 !important;
+      pointer-events: none;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu .menu-list__submenu-inner {
+      pointer-events: auto;
+      display: block !important;
+      width: max-content !important;
+      min-width: 240px;
+      max-width: 360px;
+      margin-inline-start: var(--dd-left, 0px);
+      margin-top: 6px;
+      padding: 10px 8px !important;
+      transform: none !important;
+      max-height: none !important;
+      overflow: visible !important;
+      background: #fff;
+      border: 1px solid #ece3f3;
+      border-radius: 16px;
+      box-shadow: 0 14px 36px rgba(91, 63, 140, 0.14);
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu .mega-menu {
+      display: block !important;
+      width: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu :is(.mega-menu__grid, .mega-menu__list, .mega-menu__column) {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0 !important;
+      width: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      grid-column: auto !important;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu :is(.mega-menu__content, .mega-menu__link-image) {
+      display: none !important;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu .mega-menu__link {
+      display: block !important;
+      padding: 10px 18px !important;
+      border-radius: 10px;
+      white-space: nowrap;
+      font-family: var(--font-body--family, 'Lato', sans-serif) !important;
+      font-size: 15px !important;
+      line-height: 1.4 !important;
+      color: #3a3a3a !important;
+      text-decoration: none !important;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu .mega-menu__link:hover,
+    .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu .mega-menu__link:focus-visible {
+      background: #f5f0f7;
+      color: #5b3f8c !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function place(item) {
+      var submenu = item.querySelector(':scope > .menu-list__submenu');
+      var link = item.querySelector('.menu-list__link');
+      if (!submenu || !link) return;
+      var ref = submenu.offsetParent || submenu.parentElement;
+      if (!ref) return;
+      var left = link.getBoundingClientRect().left - ref.getBoundingClientRect().left - 18;
+      submenu.style.setProperty('--dd-left', Math.max(0, Math.round(left)) + 'px');
+    }
+    function init() {
+      if (!window.matchMedia('(min-width: 750px)').matches) return;
+      document.querySelectorAll('.menu-list__list-item').forEach(function (item) {
+        if (item.getAttribute('slot') === 'overflow' || item.dataset.ddReady) return;
+        item.dataset.ddReady = 'true';
+        ['pointerenter', 'focusin'].forEach(function (ev) {
+          item.addEventListener(ev, function () { place(item); });
+        });
+        place(item);
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    window.addEventListener('resize', function () {
+      document.querySelectorAll('.menu-list__list-item[data-dd-ready]').forEach(place);
+    });
+  })();
+</script>
