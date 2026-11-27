@@ -9,67 +9,14 @@
  */{
   "sections": {
     "main": {
-      "type": "main-page",
-      "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "content": {
-          "type": "text",
-          "name": "t:names.content",
-          "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "title",
-        "content"
-      ],
+      "type": "soft-page",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
-        "padding-block-end": 0
+        "eyebrow": "We're here for you",
+        "heading": "",
+        "intro": "<p>Questions about an order, a gift or just want to say hello? Send us a message and we'll get back to you.</p>",
+        "show_content": true,
+        "content_style": "reading",
+        "background_color": "#f7f2ec"
       }
     },
     "form": {
@@ -93,7 +40,7 @@
               "type": "contact-form-submit-button",
               "static": true,
               "settings": {
-                "label": "Submit",
+                "label": "Send message",
                 "style_class": "button",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -133,8 +80,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 32,
-        "padding-block-end": 84
+        "padding-block-start": 28,
+        "padding-block-end": 96
       }
     }
   },

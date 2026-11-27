@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "soft-page",
+      "settings": {
+        "eyebrow": "Questions & answers",
+        "heading": "",
+        "intro": "<p>Everything you need to know about our pieces, shipping and gifting. Can't find your answer? <a href=\"/pages/contact\">We're here for you.</a></p>",
+        "show_content": true,
+        "content_style": "faq",
+        "background_color": "#f7f2ec"
+      }
+    }
+  },
+  "order": ["main"]
+}
