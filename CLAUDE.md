@@ -6,6 +6,7 @@
   - ser escrito em português, com os textos do site em inglês entre aspas;
   - listar cada passo com os valores exatos (nomes, handles, tipos, modelos de tema);
   - pedir que o Sidekick diga o que não conseguiu fazer e dê o caminho manual no painel.
+- **Mudanças no tema:** ao terminar, já **abra o pull request para a `main`** junto com a prévia (capturas de tela). Não espere aprovação para abrir o pull request: ele não publica nada. A dona da loja aprova fazendo o merge, e só o merge coloca no ar.
 
 ## Fluxo da série "Behind the Strength" (Diário Real)
 

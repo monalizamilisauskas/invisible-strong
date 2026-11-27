@@ -1,0 +1,111 @@
+{%- comment -%}
+  Centered heading in the Invisible Strong style:
+  small eyebrow, Playfair title in purple and a gold butterfly flourish.
+{%- endcomment -%}
+
+<div class="is-soft-heading" {{ block.shopify_attributes }}>
+  {%- if block.settings.eyebrow != blank -%}
+    <p class="is-soft-heading__eyebrow">{{ block.settings.eyebrow }}</p>
+  {%- endif -%}
+  {%- if block.settings.heading != blank -%}
+    <h2 class="is-soft-heading__title">{{ block.settings.heading }}</h2>
+  {%- endif -%}
+  {%- if block.settings.show_flourish -%}
+    {% render 'diary-butterflies', variant: 'flourish' %}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .is-soft-heading {
+    width: 100%;
+    text-align: center;
+    margin: 0 0 8px;
+  }
+  .is-soft-heading__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 10px;
+  }
+  .is-soft-heading__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3.2vw, 38px);
+    line-height: 1.2;
+    color: #5b3f8c;
+    margin: 0 0 14px;
+  }
+
+  /* Extra line inside product cards ("With message card · View piece").
+     Also defined in sections/collection-hero.liquid so it works on every page. */
+  .is-card-extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 8px 0;
+  }
+  .is-card-extra__tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a8823f;
+  }
+  .is-card-extra__cta {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #5b3f8c;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 1px;
+  }
+  @media (max-width: 640px) {
+    .is-card-extra {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 0 4px;
+    }
+    .is-card-extra__tag {
+      font-size: 10px;
+    }
+    .is-card-extra__cta {
+      margin-left: 0;
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Soft heading",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "More pieces with meaning"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_flourish",
+      "label": "Show butterfly flourish",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soft heading"
+    }
+  ]
+}
+{% endschema %}
