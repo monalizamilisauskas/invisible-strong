@@ -293,7 +293,7 @@
                 "size_label": "Size & fit",
                 "fabric_label": "Fabric & care",
                 "shipping_label": "Shipping & returns",
-                "shipping_returns": ""
+                "shipping_returns": "<p><strong>Free US shipping</strong> on orders $95+. Orders arrive in 5–10 business days.</p><p>Lost, damaged or wrong item? <strong>We'll replace it free</strong> — just <a href=\"/pages/contact\">contact us</a>.</p>"
               },
               "blocks": {}
             }
@@ -462,7 +462,7 @@
         "eyebrow": "Ready to give",
         "heading": "What's inside the gift",
         "piece_title": "Your piece",
-        "piece_text": "Made to order in the US, for someone fighting a battle no one can see.",
+        "piece_text": "Chosen for someone fighting a battle no one can see.",
         "card_title": "A heartfelt message card",
         "card_text": "Words that say what's hard to say out loud — so your gift speaks for you.",
         "box_title": "Gift-ready packaging",
