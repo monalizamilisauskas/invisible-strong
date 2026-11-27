@@ -1,0 +1,254 @@
+{%- comment -%}
+  Behind the Strength: listing page for the diary series.
+  Used by templates/blog.diary.json. Calm, single-column cards
+  with generous spacing for readers with visual fatigue.
+{%- endcomment -%}
+
+<section
+  class="is-diary-list"
+  style="--diary-bg: {{ section.settings.background_color }};"
+>
+  <div class="is-diary-list__inner">
+    <header class="is-diary-list__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="is-diary-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="is-diary-list__title">{{ blog.title }}</h1>
+      {%- if section.settings.intro != blank -%}
+        <div class="is-diary-list__intro">{{ section.settings.intro }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- paginate blog.articles by section.settings.per_page -%}
+      {%- if blog.articles.size > 0 -%}
+        <ol class="is-diary-list__items" role="list">
+          {%- for article in blog.articles -%}
+            {%- liquid
+              assign words = article.content | strip_html | split: ' ' | size
+              assign minutes = words | divided_by: 200
+              if minutes < 1
+                assign minutes = 1
+              endif
+              if article.excerpt != blank
+                assign teaser = article.excerpt | strip_html | truncatewords: 32
+              else
+                assign teaser = article.content | strip_html | truncatewords: 32
+              endif
+            -%}
+            <li>
+              <a class="is-diary-card" href="{{ article.url }}">
+                <p class="is-diary-meta">
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{- article.published_at | date: '%B %-d, %Y' -}}
+                  </time>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ minutes }} min read</span>
+                </p>
+                <h2 class="is-diary-card__title">{{ article.title }}</h2>
+                <p class="is-diary-card__teaser">{{ teaser }}</p>
+                <span class="is-diary-card__cta">{{ section.settings.read_label }} <span aria-hidden="true">→</span></span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ol>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="is-diary-list__pagination" aria-label="Pagination">
+            {{- paginate | default_pagination -}}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="is-diary-list__empty">{{ section.settings.empty_text }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .is-diary-list {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--diary-bg, #f7f2ec);
+    padding: 72px 20px 96px;
+    color: #3a3a3a;
+  }
+  .is-diary-list * {
+    box-sizing: border-box;
+  }
+  .is-diary-list__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .is-diary-list__header {
+    text-align: center;
+    margin: 0 0 56px;
+  }
+  .is-diary-eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 12px;
+  }
+  .is-diary-list__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(32px, 4.4vw, 48px);
+    line-height: 1.2;
+    color: #5b3f8c;
+    margin: 0 0 18px;
+  }
+  .is-diary-list__intro {
+    font-size: 18px;
+    line-height: 1.75;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .is-diary-list__intro p {
+    margin: 0;
+  }
+  .is-diary-list__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .is-diary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 34px 30px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.07);
+    border-left: 3px solid #c9a86a;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .is-diary-card:hover,
+  .is-diary-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(91, 63, 140, 0.14);
+  }
+  .is-diary-card:focus-visible {
+    outline: 2px solid #8e6bbf;
+    outline-offset: 3px;
+  }
+  .is-diary-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: #6f6670;
+    margin: 0;
+  }
+  .is-diary-card__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(22px, 2.6vw, 27px);
+    line-height: 1.35;
+    color: #5b3f8c;
+    margin: 0;
+  }
+  .is-diary-card__teaser {
+    font-size: 17px;
+    line-height: 1.75;
+    margin: 0;
+  }
+  .is-diary-card__cta {
+    align-self: flex-start;
+    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #5b3f8c;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 2px;
+  }
+  .is-diary-list__pagination {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 16px;
+  }
+  .is-diary-list__pagination span,
+  .is-diary-list__pagination a {
+    padding: 6px 10px;
+  }
+  .is-diary-list__empty {
+    text-align: center;
+    font-size: 18px;
+  }
+  @media (max-width: 560px) {
+    .is-diary-list {
+      padding: 52px 16px 72px;
+    }
+    .is-diary-list__header {
+      margin-bottom: 40px;
+    }
+    .is-diary-card {
+      padding: 26px 22px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .is-diary-card {
+      transition: none;
+    }
+    .is-diary-card:hover {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Diary list",
+  "tag": "div",
+  "class": "is-diary-list-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "A diary series"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Short, honest notes from my everyday life with fibromyalgia — the parts no one sees.</p>"
+    },
+    {
+      "type": "text",
+      "id": "read_label",
+      "label": "Card link label",
+      "default": "Read entry"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "The first entry is coming soon."
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Entries per page",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f7f2ec"
+    }
+  ]
+}
+{% endschema %}

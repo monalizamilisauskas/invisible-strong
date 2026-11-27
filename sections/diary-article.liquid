@@ -1,0 +1,692 @@
+{%- comment -%}
+  Behind the Strength: single diary entry.
+  Used by templates/article.diary.json.
+  - Reading column limited to ~65 characters, large type, loose line height.
+  - Engagement question from the article metafield custom.diary_question
+    (falls back to the section setting).
+  - Simple share buttons, optional soft CTA / featured product blocks,
+    and native Shopify comments when enabled on the blog.
+{%- endcomment -%}
+
+{%- liquid
+  assign words = article.content | strip_html | split: ' ' | size
+  assign minutes = words | divided_by: 200
+  if minutes < 1
+    assign minutes = 1
+  endif
+
+  assign question = article.metafields.custom.diary_question.value | default: section.settings.fallback_question
+  assign share_url = request.origin | append: article.url
+  assign share_url_encoded = share_url | url_encode
+  assign share_title_encoded = article.title | url_encode
+-%}
+
+<article
+  class="is-diary-article"
+  style="--diary-bg: {{ section.settings.background_color }};"
+>
+  <div class="is-diary-article__inner">
+    <a class="is-diary-article__back" href="{{ blog.url }}">
+      <span aria-hidden="true">←</span> {{ section.settings.back_label }}
+    </a>
+
+    <header class="is-diary-article__header">
+      <p class="is-diary-eyebrow">{{ blog.title }}</p>
+      <h1 class="is-diary-article__title">{{ article.title }}</h1>
+      <p class="is-diary-meta is-diary-meta--center">
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+          {{- article.published_at | date: '%B %-d, %Y' -}}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{{ minutes }} min read</span>
+      </p>
+    </header>
+
+    {%- if article.image and section.settings.show_image -%}
+      <figure class="is-diary-article__image">
+        {{
+          article.image
+          | image_url: width: 1400
+          | image_tag: loading: 'eager', sizes: '(min-width: 760px) 680px, 100vw', alt: article.image.alt
+        }}
+      </figure>
+    {%- endif -%}
+
+    <div class="is-diary-article__body">
+      {{ article.content }}
+    </div>
+
+    {%- if question != blank -%}
+      <aside class="is-diary-question" aria-label="{{ section.settings.question_eyebrow | escape }}">
+        <p class="is-diary-eyebrow">{{ section.settings.question_eyebrow }}</p>
+        <div class="is-diary-question__text">{{ question | newline_to_br }}</div>
+        {%- if blog.comments_enabled? -%}
+          <a class="is-diary-question__link" href="#diary-comments">{{ section.settings.question_cta }}</a>
+        {%- endif -%}
+      </aside>
+    {%- endif -%}
+
+    <div class="is-diary-share">
+      <p class="is-diary-share__label">{{ section.settings.share_label }}</p>
+      <ul class="is-diary-share__list" role="list">
+        <li>
+          <a
+            class="is-diary-share__btn"
+            href="https://wa.me/?text={{ share_title_encoded }}%20{{ share_url_encoded }}"
+            target="_blank"
+            rel="noopener"
+          >
+            WhatsApp
+          </a>
+        </li>
+        <li>
+          <a
+            class="is-diary-share__btn"
+            href="https://www.facebook.com/sharer/sharer.php?u={{ share_url_encoded }}"
+            target="_blank"
+            rel="noopener"
+          >
+            Facebook
+          </a>
+        </li>
+        <li>
+          <a
+            class="is-diary-share__btn"
+            href="https://pinterest.com/pin/create/button/?url={{ share_url_encoded }}&description={{ share_title_encoded }}{% if article.image %}&media={{ article.image | image_url: width: 1200 | prepend: 'https:' | url_encode }}{% endif %}"
+            target="_blank"
+            rel="noopener"
+          >
+            Pinterest
+          </a>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="is-diary-share__btn"
+            data-diary-copy="{{ share_url | escape }}"
+            data-copied-label="{{ section.settings.copied_label | escape }}"
+          >
+            {{ section.settings.copy_label }}
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'cta' -%}
+          <aside class="is-diary-cta" {{ block.shopify_attributes }}>
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="is-diary-cta__eyebrow">{{ block.settings.eyebrow }}</p>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="is-diary-cta__heading">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <div class="is-diary-cta__text">{{ block.settings.text }}</div>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank -%}
+              <a class="is-diary-cta__btn" href="{{ block.settings.link | default: '/collections/all' }}">
+                {{- block.settings.button_label }} <span aria-hidden="true">→</span>
+              </a>
+            {%- endif -%}
+          </aside>
+
+        {%- when 'product' -%}
+          {%- assign p = block.settings.product -%}
+          {%- if p != blank -%}
+            <aside class="is-diary-cta is-diary-cta--product" {{ block.shopify_attributes }}>
+              {%- if block.settings.eyebrow != blank -%}
+                <p class="is-diary-cta__eyebrow">{{ block.settings.eyebrow }}</p>
+              {%- endif -%}
+              <a class="is-diary-product" href="{{ p.url }}">
+                <span class="is-diary-product__img">
+                  {%- if p.featured_image -%}
+                    {{ p.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: p.title }}
+                  {%- endif -%}
+                </span>
+                <span class="is-diary-product__body">
+                  <span class="is-diary-product__name">{{ p.title }}</span>
+                  <span class="is-diary-product__price">
+                    {%- if p.price_varies -%}From {{ p.price_min | money }}{%- else -%}{{ p.price | money }}{%- endif -%}
+                  </span>
+                  <span class="is-diary-cta__btn">
+                    {{- block.settings.button_label | default: 'View piece' }} <span aria-hidden="true">→</span>
+                  </span>
+                </span>
+              </a>
+            </aside>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {%- if blog.comments_enabled? -%}
+      <section id="diary-comments" class="is-diary-comments">
+        <h2 class="is-diary-comments__heading">{{ section.settings.comments_heading }}</h2>
+
+        {%- paginate article.comments by 10 -%}
+          {%- if article.comments_count > 0 -%}
+            <ul class="is-diary-comments__list" role="list">
+              {%- for comment in article.comments -%}
+                <li class="is-diary-comment">
+                  <div class="is-diary-comment__content">{{ comment.content }}</div>
+                  <p class="is-diary-comment__author">
+                    {{ comment.author }} · {{ comment.created_at | date: '%B %-d, %Y' }}
+                  </p>
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- if paginate.pages > 1 -%}
+              <nav class="is-diary-comments__pagination" aria-label="Comments pagination">
+                {{- paginate | default_pagination -}}
+              </nav>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endpaginate -%}
+
+        <div class="is-diary-comments__form">
+          {% render 'blog-comment-form', article: article, section_id: section.id %}
+        </div>
+      </section>
+    {%- endif -%}
+  </div>
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+<script>
+  document.querySelectorAll('[data-diary-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-diary-copy');
+      var original = btn.textContent;
+      var done = function () {
+        btn.textContent = btn.getAttribute('data-copied-label');
+        setTimeout(function () { btn.textContent = original; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { window.prompt('', url); });
+      } else {
+        window.prompt('', url);
+      }
+    });
+  });
+</script>
+
+{% stylesheet %}
+  .is-diary-article {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--diary-bg, #f7f2ec);
+    padding: 48px 20px 104px;
+    color: #3a3a3a;
+  }
+  .is-diary-article * {
+    box-sizing: border-box;
+  }
+  .is-diary-article .is-diary-eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 12px;
+  }
+  .is-diary-article .is-diary-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: #6f6670;
+    margin: 0;
+  }
+  .is-diary-comments__pagination {
+    margin-top: -16px;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 16px;
+  }
+  .is-diary-comments__pagination span,
+  .is-diary-comments__pagination a {
+    padding: 6px 10px;
+  }
+  .is-diary-article__inner {
+    max-width: 65ch;
+    margin: 0 auto;
+    font-size: 19px;
+  }
+  .is-diary-article__back {
+    display: inline-block;
+    font-size: 15px;
+    color: #5b3f8c;
+    text-decoration: none;
+    margin: 0 0 40px;
+  }
+  .is-diary-article__back:hover {
+    text-decoration: underline;
+  }
+  .is-diary-article__header {
+    text-align: center;
+    margin: 0 0 48px;
+  }
+  .is-diary-article__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(30px, 4.2vw, 44px);
+    line-height: 1.25;
+    color: #5b3f8c;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .is-diary-meta--center {
+    justify-content: center;
+  }
+  .is-diary-article__image {
+    margin: 0 0 48px;
+  }
+  .is-diary-article__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 18px;
+  }
+  .is-diary-article__body {
+    font-size: 19px;
+    line-height: 1.85;
+    letter-spacing: 0.005em;
+  }
+  .is-diary-article__body p {
+    margin: 0 0 1.5em;
+  }
+  .is-diary-article__body blockquote {
+    margin: 2em 0;
+    padding: 0 0 0 1.2em;
+    border-left: 3px solid #c9a86a;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 1.15em;
+    line-height: 1.6;
+    color: #5b3f8c;
+  }
+  .is-diary-article__body h2,
+  .is-diary-article__body h3 {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    color: #5b3f8c;
+    line-height: 1.35;
+    margin: 2em 0 0.8em;
+  }
+  .is-diary-question {
+    margin: 56px 0 0;
+    padding: 34px 36px;
+    background: #fff;
+    border-radius: 18px;
+    border-left: 3px solid #c9a86a;
+    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.07);
+  }
+  .is-diary-question__text {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 22px;
+    line-height: 1.55;
+    color: #5b3f8c;
+  }
+  .is-diary-question__link {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #5b3f8c;
+    text-decoration: none;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 2px;
+  }
+  .is-diary-share {
+    margin: 48px 0 0;
+    text-align: center;
+  }
+  .is-diary-share__label {
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6f6670;
+    margin: 0 0 14px;
+  }
+  .is-diary-share__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .is-diary-share__btn {
+    display: inline-block;
+    font: inherit;
+    font-size: 15px;
+    color: #5b3f8c;
+    background: transparent;
+    border: 1px solid #c9b6e0;
+    border-radius: 999px;
+    padding: 9px 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .is-diary-share__btn:hover,
+  .is-diary-share__btn:focus-visible {
+    background: #efe7f5;
+    border-color: #8e6bbf;
+  }
+  .is-diary-cta {
+    margin: 64px 0 0;
+    padding: 40px 36px;
+    text-align: center;
+    background: #f5f0f7;
+    border-radius: 18px;
+    border-top: 2px solid #c9a86a;
+  }
+  .is-diary-cta__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a86a;
+    margin: 0 0 12px;
+  }
+  .is-diary-cta__heading {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(24px, 3vw, 30px);
+    line-height: 1.3;
+    color: #5b3f8c;
+    margin: 0 0 12px;
+  }
+  .is-diary-cta__text {
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .is-diary-cta__text p {
+    margin: 0;
+  }
+  .is-diary-cta__btn {
+    display: inline-block;
+    margin-top: 22px;
+    background: #8e6bbf;
+    color: #fff;
+    border-radius: 999px;
+    padding: 13px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .is-diary-cta__btn:hover,
+  .is-diary-product:hover .is-diary-cta__btn {
+    background: #5b3f8c;
+  }
+  .is-diary-product {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .is-diary-product__img {
+    flex: 0 0 140px;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #efe7f5;
+  }
+  .is-diary-product__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-diary-product__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .is-diary-product__name {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 20px;
+    line-height: 1.3;
+    color: #5b3f8c;
+  }
+  .is-diary-product__price {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .is-diary-product .is-diary-cta__btn {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+  .is-diary-comments {
+    margin: 72px 0 0;
+    padding-top: 48px;
+    border-top: 1px solid #e4d8ee;
+  }
+  .is-diary-comments__heading {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: 28px;
+    color: #5b3f8c;
+    margin: 0 0 28px;
+  }
+  .is-diary-comments__list {
+    list-style: none;
+    margin: 0 0 40px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .is-diary-comment {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 24px;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .is-diary-comment__content p {
+    margin: 0 0 0.8em;
+  }
+  .is-diary-comment__author {
+    margin: 0;
+    font-size: 14px;
+    color: #6f6670;
+  }
+  .is-diary-comments__form {
+    font-size: 17px;
+  }
+  @media (max-width: 560px) {
+    .is-diary-article {
+      padding: 32px 18px 80px;
+    }
+    .is-diary-article__inner,
+    .is-diary-article__body {
+      font-size: 18px;
+    }
+    .is-diary-question,
+    .is-diary-cta {
+      padding: 28px 22px;
+    }
+    .is-diary-product {
+      flex-direction: column;
+      text-align: center;
+    }
+    .is-diary-product__img {
+      flex-basis: auto;
+      width: 100%;
+    }
+    .is-diary-product__body {
+      align-items: center;
+    }
+    .is-diary-product .is-diary-cta__btn {
+      align-self: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Diary entry",
+  "tag": "div",
+  "class": "is-diary-article-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back link label",
+      "default": "All entries"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show featured image",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Engagement question"
+    },
+    {
+      "type": "paragraph",
+      "content": "Each entry uses its own metafield \"Diary question\" (custom.diary_question). The text below is used when that field is empty."
+    },
+    {
+      "type": "text",
+      "id": "question_eyebrow",
+      "label": "Question label",
+      "default": "Your turn"
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_question",
+      "label": "Fallback question",
+      "default": "How did your day begin today?"
+    },
+    {
+      "type": "text",
+      "id": "question_cta",
+      "label": "Reply link label",
+      "info": "Shown only when comments are enabled on the blog.",
+      "default": "Share your answer below"
+    },
+    {
+      "type": "header",
+      "content": "Sharing"
+    },
+    {
+      "type": "text",
+      "id": "share_label",
+      "label": "Share label",
+      "default": "Share this entry"
+    },
+    {
+      "type": "text",
+      "id": "copy_label",
+      "label": "Copy link label",
+      "default": "Copy link"
+    },
+    {
+      "type": "text",
+      "id": "copied_label",
+      "label": "Copied confirmation",
+      "default": "Link copied ✓"
+    },
+    {
+      "type": "header",
+      "content": "Comments"
+    },
+    {
+      "type": "text",
+      "id": "comments_heading",
+      "label": "Comments heading",
+      "default": "From our community"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f7f2ec"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "cta",
+      "name": "Soft call to action",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "A quiet reminder"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Carry a reminder of your strength"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pieces made by a woman living with fibromyalgia — for the days that ask more of you than anyone sees.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Find Your Piece"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Featured product",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Carry a reminder of your strength"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View piece"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

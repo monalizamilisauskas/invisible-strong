@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "diary-list",
+      "settings": {
+        "eyebrow": "A diary series",
+        "intro": "<p>Short, honest notes from my everyday life with fibromyalgia — the parts no one sees before I leave the bed, and the small wins that still count.</p>",
+        "read_label": "Read entry",
+        "empty_text": "The first entry is coming soon.",
+        "per_page": 10,
+        "background_color": "#f7f2ec"
+      }
+    }
+  },
+  "order": ["main"]
+}

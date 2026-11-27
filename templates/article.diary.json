@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "diary-article",
+      "blocks": {
+        "cta": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "A quiet reminder",
+            "heading": "Carry a reminder of your strength",
+            "text": "<p>Pieces made by a woman living with fibromyalgia — for the days that ask more of you than anyone sees.</p>",
+            "button_label": "Find Your Piece",
+            "link": "shopify://collections/gifts-that-say-i-believe-you"
+          }
+        }
+      },
+      "block_order": ["cta"],
+      "settings": {
+        "back_label": "All entries",
+        "show_image": true,
+        "question_eyebrow": "Your turn",
+        "fallback_question": "How did your day begin today?",
+        "question_cta": "Share your answer below",
+        "share_label": "Share this entry",
+        "copy_label": "Copy link",
+        "copied_label": "Link copied ✓",
+        "comments_heading": "From our community",
+        "background_color": "#f7f2ec"
+      }
+    }
+  },
+  "order": ["main"]
+}
