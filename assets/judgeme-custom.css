@@ -184,3 +184,45 @@ html body .jdgm-prev-badge__text {
     box-sizing: border-box;
   }
 }
+
+/* ---------- Section polish (product page) ---------- */
+/* Our own heading ("Real words, real strength") replaces the app title */
+html body .jdgm-rev-widg__title {
+  display: none !important;
+}
+
+/* Summary + button inside a centered white card */
+html body .jdgm-rev-widg__header {
+  background: #fff !important;
+  border: 1px solid #ece3f3 !important;
+  border-radius: 20px !important;
+  padding: 26px 30px !important;
+  margin: 8px auto 28px !important;
+  box-shadow: 0 10px 30px rgba(91, 63, 140, 0.08) !important;
+  text-align: center !important;
+}
+html body .jdgm-rev-widg__summary {
+  text-align: center !important;
+}
+html body .jdgm-rev-widg__summary-average,
+html body .jdgm-rev-widg__summary-rating {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
+  font-size: 44px !important;
+  line-height: 1 !important;
+  color: #5b3f8c !important;
+}
+html body .jdgm-rev-widg__header .jdgm-star {
+  font-size: 22px !important;
+}
+
+/* Reviews in two columns on large screens */
+@media (min-width: 990px) {
+  html body .jdgm-rev-widg__reviews {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  html body .jdgm-rev-widg__reviews .jdgm-rev {
+    margin: 0 !important;
+  }
+}
