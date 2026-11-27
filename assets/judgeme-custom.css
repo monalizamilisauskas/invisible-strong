@@ -143,11 +143,7 @@ html body .jdgm-verified-badge {
   border-radius: 999px !important;
 }
 
-/* Links (read more, pagination) — never the main buttons */
-html body .jdgm-review-widget a:not(.jdgm-write-rev-link):not(.jdgm-rev__pic-link):not([class*="write"]):not([class*="Write"]):not([class*="btn"]):not([class*="button"]):not([role="button"]) {
-  color: #5b3f8c !important;
-  text-decoration-color: #c9a86a !important;
-}
+/* Links: keep the app's own colors (a color rule here turned the button text purple-on-purple) */
 html body .jdgm-paginate__page.jdgm-curt {
   color: #5b3f8c !important;
   font-weight: 700 !important;
@@ -266,4 +262,13 @@ html body .jdgm-review-widget :is(p, div, span):is([class*="empty"], [class*="no
   font-style: italic !important;
   font-size: 20px !important;
   color: #5b3f8c !important;
+}
+
+html body .is-soft-heading ~ .shopify-app-block .jdgm-review-widget :is([class*="heading"], [class*="Heading"], [class*="widget-title"], [class*="widget__title"], [class*="WidgetTitle"]):not([class*="rev"]) {
+  display: none !important;
+}
+
+/* Rounded, readable main button (any button inside the empty state / header) */
+html body .jdgm-review-widget :is(a, button) {
+  border-radius: 999px !important;
 }
