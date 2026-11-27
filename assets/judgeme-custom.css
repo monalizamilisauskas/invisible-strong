@@ -272,3 +272,9 @@ html body .is-soft-heading ~ .shopify-app-block .jdgm-review-widget :is([class*=
 html body .jdgm-review-widget :is(a, button) {
   border-radius: 999px !important;
 }
+
+/* Empty state: the only link/button is the main "Write a review" — force white text */
+html body .jdgm-review-widget:has(:is([class*="empty"], [class*="no-review"], [class*="noReview"])) :is(a, button),
+html body .jdgm-review-widget:has(:is([class*="empty"], [class*="no-review"], [class*="noReview"])) :is(a, button) * {
+  color: #fff !important;
+}
