@@ -6,7 +6,11 @@
   - ser escrito em português, com os textos do site em inglês entre aspas;
   - listar cada passo com os valores exatos (nomes, handles, tipos, modelos de tema);
   - pedir que o Sidekick diga o que não conseguiu fazer e dê o caminho manual no painel.
-- **Mudanças no tema:** ao terminar, já **abra o pull request para a `main`** junto com a prévia (capturas de tela). Não espere aprovação para abrir o pull request: ele não publica nada. A dona da loja aprova fazendo o merge, e só o merge coloca no ar.
+- **Mudanças no tema:** a dona da loja autorizou o Claude a **abrir o pull request e fazer o merge na `main`** sozinho, publicando direto na loja. Ao terminar:
+  1. rode o Theme Check e gere a prévia (capturas de tela);
+  2. antes do merge, confira se a `main` recebeu commits do editor da Shopify nos mesmos arquivos (para não sobrescrever edições dela) — se houver conflito, pare e avise;
+  3. abra o pull request, faça o merge e envie as capturas de tela, dizendo que já está no ar.
+  Se ela não gostar de algo, corrija com um novo pull request e merge.
 
 ## Fluxo da série "Behind the Strength" (Diário Real)
 
