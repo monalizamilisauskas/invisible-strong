@@ -7,7 +7,12 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign slide_count = section.blocks.size
+  assign slide_count = 0
+  for b in section.blocks
+    if b.settings.image != blank or b.settings.video != blank
+      assign slide_count = slide_count | plus: 1
+    endif
+  endfor
   assign overlay_alpha = section.settings.overlay_opacity | divided_by: 100.0
 -%}
 
@@ -22,8 +27,15 @@
   style="--hs-overlay: rgba(247, 242, 236, {{ overlay_alpha }}); --hs-bg: {{ section.settings.background_color }};"
 >
   <div class="is-hs__track">
+    {%- assign slide_i = 0 -%}
     {%- for block in section.blocks -%}
+      {%- if block.settings.image == blank and block.settings.video == blank -%}{%- continue -%}{%- endif -%}
+      {%- assign slide_i = slide_i | plus: 1 -%}
       {%- liquid
+        assign is_first = false
+        if slide_i == 1
+          assign is_first = true
+        endif
         assign pos_y = block.settings.image_position | default: 'center'
         assign focus_x = block.settings.mobile_focus_x | default: 50
         assign poster = nil
@@ -32,11 +44,11 @@
         endif
       -%}
       <div
-        class="is-hs__slide{% if forloop.first %} is-active{% endif %}"
+        class="is-hs__slide{% if is_first %} is-active{% endif %}"
         role="group"
         aria-roledescription="slide"
-        aria-label="{{ forloop.index }} / {{ slide_count }}"
-        {% unless forloop.first %}aria-hidden="true"{% endunless %}
+        aria-label="{{ slide_i }} / {{ slide_count }}"
+        {% unless is_first %}aria-hidden="true"{% endunless %}
         style="--hs-pos-y: {{ pos_y }}; --hs-focus-x: {{ focus_x }}%;"
         data-is-hs-slide
         {{ block.shopify_attributes }}
@@ -47,7 +59,7 @@
               block.settings.video
               | video_tag:
                 poster: poster,
-                autoplay: forloop.first,
+                autoplay: is_first,
                 loop: true,
                 controls: false,
                 muted: true,
@@ -57,7 +69,7 @@
             }}
           {%- elsif block.settings.image != blank -%}
             {%- liquid
-              if forloop.first
+              if is_first
                 assign loading = 'eager'
                 assign priority = 'high'
               else
@@ -85,10 +97,10 @@
         <div class="is-hs__content">
           <div class="is-hs__content-inner">
             {%- if block.settings.title != blank -%}
-              {%- if forloop.first -%}
-                <h1 class="is-hs__title">{{ block.settings.title }}</h1>
+              {%- if is_first -%}
+                <h1 class="is-hs__title">{{ block.settings.title | newline_to_br }}</h1>
               {%- else -%}
-                <h2 class="is-hs__title">{{ block.settings.title }}</h2>
+                <h2 class="is-hs__title">{{ block.settings.title | newline_to_br }}</h2>
               {%- endif -%}
             {%- endif -%}
             {%- if block.settings.text != blank -%}
@@ -98,7 +110,7 @@
               <a
                 class="is-hs__btn"
                 href="{{ block.settings.button_link | default: routes.all_products_collection_url }}"
-                {% unless forloop.first %}tabindex="-1"{% endunless %}
+                {% unless is_first %}tabindex="-1"{% endunless %}
               >
                 {{- block.settings.button_label -}}
               </a>
@@ -115,7 +127,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
       </button>
       <div class="is-hs__dots">
-        {%- for block in section.blocks -%}
+        {%- for i in (1..slide_count) -%}
           <button
             type="button"
             class="is-hs__dot{% if forloop.first %} is-active{% endif %}"
@@ -487,9 +499,10 @@
           "default": 70
         },
         {
-          "type": "text",
+          "type": "textarea",
           "id": "title",
-          "label": "Title"
+          "label": "Title",
+          "info": "Press Enter for a line break."
         },
         {
           "type": "textarea",

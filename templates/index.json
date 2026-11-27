@@ -9,6 +9,82 @@
  */
 {
   "sections": {
+    "hero_slideshow": {
+      "type": "hero-slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero-sala_jpg.jpg",
+            "video": "shopify://files/videos/hero-sala-video.mp4",
+            "image_position": "40%",
+            "mobile_focus_x": 85,
+            "title": "Invisible pain.\nVisible strength.",
+            "text": "Gifts created by a woman living with fibromyalgia — for every warrior fighting a battle no one can see, and for the people who love them.",
+            "button_label": "Find Your Piece",
+            "button_link": "shopify://collections/gifts-that-say-i-believe-you"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image_position": "30%",
+            "mobile_focus_x": 75,
+            "title": "Three words she needs to hear:\nI believe you.",
+            "text": "",
+            "button_label": "Shop the necklace",
+            "button_link": "shopify://products/to-my-daughter-i-believe-you-necklace-shop-240024-8221"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image_position": "30%",
+            "mobile_focus_x": 65,
+            "title": "Not fine,\nbut still here.",
+            "text": "",
+            "button_label": "Shop the crewneck",
+            "button_link": "shopify://products/not-fine-but-still-here-crewneck-black-shop-240024-7296"
+          }
+        },
+        "slide_4": {
+          "type": "slide",
+          "settings": {
+            "image_position": "30%",
+            "mobile_focus_x": 65,
+            "title": "A quiet reminder\nof your strength.",
+            "text": "",
+            "button_label": "Shop the necklace",
+            "button_link": "shopify://products/invisible-strong-ribbon-necklace-shop-240024-2071"
+          }
+        },
+        "slide_5": {
+          "type": "slide",
+          "settings": {
+            "image_position": "center",
+            "mobile_focus_x": 70,
+            "title": "Every necklace comes with\na heartfelt message.",
+            "text": "",
+            "button_label": "Shop the jewelry",
+            "button_link": "shopify://collections/gifts-that-say-i-believe-you"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3",
+        "slide_4",
+        "slide_5"
+      ],
+      "settings": {
+        "autoplay": true,
+        "speed": 6,
+        "overlay_opacity": 55,
+        "aria_label": "Featured pieces",
+        "background_color": "#f7f2ec"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -124,7 +200,8 @@
         "reflection_opacity": 25,
         "padding-block-start": 100,
         "padding-block-end": 75
-      }
+      },
+      "disabled": true
     },
     "custom_liquid_needs": {
       "type": "custom-liquid",
@@ -312,6 +389,7 @@
     }
   },
   "order": [
+    "hero_slideshow",
     "hero_jVaWmY",
     "custom_liquid_needs",
     "custom_liquid_zrdA3C",
