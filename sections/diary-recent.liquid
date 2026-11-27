@@ -1,0 +1,381 @@
+{%- comment -%}
+  Behind the Strength: recent diary entries on the home page.
+  Shows the latest entries of the chosen blog. Hidden when the blog has no entries.
+  One entry → wide horizontal card; two or three → card grid.
+{%- endcomment -%}
+
+{%- assign diary_blog = section.settings.blog -%}
+
+{%- if diary_blog != blank and diary_blog.articles_count > 0 -%}
+  {%- liquid
+    assign shown = diary_blog.articles_count
+    if shown > section.settings.count
+      assign shown = section.settings.count
+    endif
+  -%}
+  <section
+    class="is-diary-recent"
+    style="--diary-bg: {{ section.settings.background_color }};"
+  >
+    {% render 'diary-butterflies', variant: 'flutter' %}
+    <div class="is-diary-recent__inner">
+      <header class="is-diary-recent__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="is-diary-recent__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="is-diary-recent__title">{{ section.settings.heading | default: diary_blog.title }}</h2>
+        {% render 'diary-butterflies', variant: 'flourish' %}
+        {%- if section.settings.text != blank -%}
+          <p class="is-diary-recent__text">{{ section.settings.text }}</p>
+        {%- endif -%}
+      </header>
+
+      <ul class="is-diary-recent__grid is-diary-recent__grid--{{ shown }}" role="list">
+        {%- for article in diary_blog.articles limit: section.settings.count -%}
+          {%- liquid
+            assign words = article.content | strip_html | split: ' ' | size
+            assign minutes = words | divided_by: 200
+            if minutes < 1
+              assign minutes = 1
+            endif
+            if article.excerpt != blank
+              assign teaser = article.excerpt | strip_html | truncatewords: 26
+            else
+              assign teaser = article.content | strip_html | truncatewords: 26
+            endif
+            assign entry_number = diary_blog.articles_count | minus: forloop.index0
+          -%}
+          <li>
+            <a class="is-diary-recent__card" href="{{ article.url }}">
+              <span class="is-diary-recent__media">
+                {%- if article.image -%}
+                  {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: article.image.alt }}
+                {%- else -%}
+                  <span class="is-diary-recent__art" aria-hidden="true">
+                    <svg viewBox="0 0 120 120">
+                      <path fill="#8e6bbf" d="M38 14c-7 0-12 7-12 16 0 7 4 13 9 14v58a3 3 0 0 0 6 0V44c5-1 9-7 9-14 0-9-5-16-12-16z"/>
+                      <path fill="#c9a86a" d="M60 8c-7 0-12 7-12 16 0 7 4 13 9 14v64a3 3 0 0 0 6 0V38c5-1 9-7 9-14 0-9-5-16-12-16z"/>
+                      <path fill="#d9c9ec" d="M82 14c-7 0-12 7-12 16 0 7 4 13 9 14v58a3 3 0 0 0 6 0V44c5-1 9-7 9-14 0-9-5-16-12-16z"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+                <span class="is-diary-recent__number">Entry {{ entry_number }}</span>
+              </span>
+              <span class="is-diary-recent__body">
+                <span class="is-diary-recent__meta">
+                  {%- if article.tags.size > 0 -%}
+                    <span class="is-diary-recent__tag">{{ article.tags.first }}</span>
+                  {%- endif -%}
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{- article.published_at | date: '%b %-d, %Y' -}}
+                  </time>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ minutes }} min read</span>
+                </span>
+                <span class="is-diary-recent__card-title">{{ article.title }}</span>
+                <span class="is-diary-recent__teaser">{{ teaser }}</span>
+                <span class="is-diary-recent__read">{{ section.settings.read_label }} <span aria-hidden="true">→</span></span>
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="is-diary-recent__footer">
+          <a class="is-diary-recent__btn" href="{{ diary_blog.url }}">
+            {{- section.settings.button_label }} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .is-diary-recent {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 80px 20px 84px;
+    color: #3a3a3a;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(201, 168, 106, 0.16), transparent 42%),
+      radial-gradient(circle at 88% 12%, rgba(142, 107, 191, 0.18), transparent 48%),
+      var(--diary-bg, #f5f0f7);
+  }
+  .is-diary-recent * {
+    box-sizing: border-box;
+  }
+  .is-diary-recent__inner {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .is-diary-recent__header {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 44px;
+  }
+  .is-diary-recent__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 10px;
+  }
+  .is-diary-recent__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.2;
+    color: #5b3f8c;
+    margin: 0 0 16px;
+  }
+  .is-diary-recent__text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin: 18px 0 0;
+  }
+  .is-diary-recent__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
+    justify-content: center;
+    gap: 28px;
+  }
+  .is-diary-recent__grid--1 {
+    grid-template-columns: minmax(0, 860px);
+  }
+  .is-diary-recent__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .is-diary-recent__grid--1 .is-diary-recent__card {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+  }
+  .is-diary-recent__card:hover,
+  .is-diary-recent__card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(91, 63, 140, 0.16);
+  }
+  .is-diary-recent__card:focus-visible {
+    outline: 2px solid #8e6bbf;
+    outline-offset: 3px;
+  }
+  .is-diary-recent__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #efe7f5 0%, #f5ecdf 100%);
+  }
+  .is-diary-recent__grid--1 .is-diary-recent__media {
+    aspect-ratio: auto;
+    min-height: 240px;
+  }
+  .is-diary-recent__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .is-diary-recent__art {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .is-diary-recent__art svg {
+    width: 96px;
+    height: 96px;
+  }
+  .is-diary-recent__number {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    background: #5b3f8c;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 13px;
+    border-radius: 999px;
+  }
+  .is-diary-recent__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    padding: 24px 26px 26px;
+  }
+  .is-diary-recent__grid--1 .is-diary-recent__body {
+    justify-content: center;
+    padding: 32px 36px;
+  }
+  .is-diary-recent__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #6f6670;
+  }
+  .is-diary-recent__tag {
+    background: #f6efe2;
+    color: #8a6a2e;
+    border: 1px solid #e6d5b3;
+    border-radius: 999px;
+    padding: 2px 11px;
+    margin-right: 2px;
+  }
+  .is-diary-recent__card-title {
+    display: block;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 21px;
+    line-height: 1.35;
+    color: #5b3f8c;
+  }
+  .is-diary-recent__grid--1 .is-diary-recent__card-title {
+    font-size: clamp(22px, 2.6vw, 28px);
+  }
+  .is-diary-recent__teaser {
+    display: block;
+    flex: 1;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .is-diary-recent__read {
+    align-self: flex-start;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #5b3f8c;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 2px;
+  }
+  .is-diary-recent__footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .is-diary-recent__btn {
+    display: inline-block;
+    background: #8e6bbf;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .is-diary-recent__btn:hover {
+    background: #5b3f8c;
+  }
+  @media (max-width: 640px) {
+    .is-diary-recent {
+      padding: 56px 16px 60px;
+    }
+    .is-diary-recent__grid,
+    .is-diary-recent__grid--1 {
+      grid-template-columns: 1fr;
+    }
+    .is-diary-recent__grid--1 .is-diary-recent__card {
+      display: flex;
+    }
+    .is-diary-recent__grid--1 .is-diary-recent__media {
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+    }
+    .is-diary-recent__grid--1 .is-diary-recent__body {
+      padding: 24px 22px 26px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .is-diary-recent__card {
+      transition: none;
+    }
+    .is-diary-recent__card:hover {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Diary: recent entries",
+  "tag": "div",
+  "class": "is-diary-recent-section",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "count",
+      "label": "Entries to show",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Behind the Strength"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Real days, honestly told"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Short notes from my everyday life with fibromyalgia — the parts no one sees."
+    },
+    {
+      "type": "text",
+      "id": "read_label",
+      "label": "Card link label",
+      "default": "Read entry"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read all entries"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f0f7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Diary: recent entries"
+    }
+  ]
+}
+{% endschema %}
