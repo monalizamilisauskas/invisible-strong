@@ -3,7 +3,7 @@
   a short title and one line of detail.
 {%- endcomment -%}
 
-<section class="is-trust-strip" style="--strip-bg: {{ section.settings.background_color }};">
+<section class="is-trust-strip{% if section.settings.style == 'dark' %} is-trust-strip--dark{% endif %}" style="--strip-bg: {{ section.settings.background_color }};">
   <ul class="is-trust-strip__list" role="list">
     {%- for block in section.blocks -%}
       <li class="is-trust-strip__item" {{ block.shopify_attributes }}>
@@ -96,6 +96,48 @@
     line-height: 1.45;
     color: #5f5866;
   }
+  /* Dark band: full-width brand purple, gold icons, light text */
+  .is-trust-strip--dark {
+    padding: 0 20px;
+    background: var(--strip-bg, #4a2f75);
+  }
+  .is-trust-strip--dark .is-trust-strip__list {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .is-trust-strip--dark .is-trust-strip__item {
+    justify-content: center;
+    padding: 22px 24px;
+  }
+  .is-trust-strip--dark .is-trust-strip__item + .is-trust-strip__item {
+    border-left-color: rgba(255, 255, 255, 0.14);
+  }
+  .is-trust-strip--dark .is-trust-strip__icon {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(232, 211, 166, 0.45);
+  }
+  .is-trust-strip--dark .is-trust-strip__icon svg {
+    stroke: #e8d3a6;
+  }
+  .is-trust-strip--dark .is-trust-strip__title {
+    color: #ffffff;
+  }
+  .is-trust-strip--dark .is-trust-strip__text {
+    color: #e4d8f2;
+  }
+  @media (max-width: 760px) {
+    .is-trust-strip--dark {
+      padding: 6px 16px;
+    }
+    .is-trust-strip--dark .is-trust-strip__item {
+      justify-content: flex-start;
+    }
+    .is-trust-strip--dark .is-trust-strip__item + .is-trust-strip__item {
+      border-top-color: rgba(255, 255, 255, 0.14);
+    }
+  }
   @media (max-width: 760px) {
     .is-trust-strip {
       padding: 20px 16px 28px;
@@ -120,6 +162,16 @@
   "class": "is-trust-strip-section",
   "max_blocks": 4,
   "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "light", "label": "Light card" },
+        { "value": "dark", "label": "Dark band" }
+      ],
+      "default": "light"
+    },
     {
       "type": "color",
       "id": "background_color",
