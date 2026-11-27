@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "main": {
+      "type": "story-page",
+      "settings": {
+        "image": "shopify://shop_images/Gemini_Generated_Image_mi3zlqmi3zlqmi3z.jpg",
+        "image_alt": "Monaliza, founder of Invisible Strong",
+        "eyebrow": "Meet the founder",
+        "heading": "",
+        "subheading": "Invisible pain. Visible strength.",
+        "drop_cap": true,
+        "signature": "With love, Monaliza",
+        "button_label": "Find Your Piece",
+        "button_link": "",
+        "link_label": "Read the diary",
+        "link_url": "shopify://blogs/behind-the-strength",
+        "background_color": "#f7f2ec"
+      }
+    }
+  },
+  "order": ["main"]
+}
