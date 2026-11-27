@@ -135,7 +135,15 @@
   .is-story__body p {
     margin: 0 0 1.4em;
   }
-  .is-story__body > p:first-child {
+  /* Text pasted with its own wrapper: drop the extra indent */
+  .is-story__body > div,
+  .is-story__body > section {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .is-story__body > p:first-child,
+  .is-story__body > :is(div, section):first-child > p:first-child {
     font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
     font-style: italic;
     font-size: 1.3em;
@@ -143,7 +151,8 @@
     color: #5b3f8c;
     margin-bottom: 1.2em;
   }
-  .is-story__body--dropcap > p:first-child + p::first-letter {
+  .is-story__body--dropcap > p:first-child + p::first-letter,
+  .is-story__body--dropcap > :is(div, section):first-child > p:first-child + p::first-letter {
     float: left;
     font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
     font-size: 4.1em;
