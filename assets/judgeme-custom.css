@@ -257,7 +257,7 @@ html body .is-soft-heading ~ .shopify-app-block .jdgm-review-widget :is(h1, h2) 
 html body .jdgm-review-widget {
   text-align: center;
 }
-html body .jdgm-review-widget :is(p, div, span):is([class*="empty"], [class*="no-review"], [class*="noReview"]) {
+html body .jdgm-review-widget :is(p, div, span):is([class*="empty"], [class*="no-review"], [class*="noReview"]):not([role="button"]):not(:has([role="button"], a, button)):not([role="button"] *):not(a *):not(button *):not([class*="btn"] *):not([class*="button"] *) {
   font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
   font-style: italic !important;
   font-size: 20px !important;
@@ -277,4 +277,29 @@ html body .jdgm-review-widget :is(a, button) {
 html body .jdgm-review-widget:has(:is([class*="empty"], [class*="no-review"], [class*="noReview"])) :is(a, button),
 html body .jdgm-review-widget:has(:is([class*="empty"], [class*="no-review"], [class*="noReview"])) :is(a, button) * {
   color: #fff !important;
+}
+
+
+/* Main button in any form (a, button or div[role=button]) — white, readable text, pill shape.
+   Doubled class raises specificity above every other rule in this file. */
+html body .jdgm-review-widget.jdgm-review-widget :is([role="button"], button, a[class*="btn"], a[class*="button"], a[class*="write"], [class*="write-rev"], [class*="writeReview"], [class*="write-review"]),
+html body .jdgm-review-widget.jdgm-review-widget :is([role="button"], button, a[class*="btn"], a[class*="button"], a[class*="write"], [class*="write-rev"], [class*="writeReview"], [class*="write-review"]) * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-family: var(--font-body--family, 'Lato', sans-serif) !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  opacity: 1 !important;
+}
+html body .jdgm-review-widget.jdgm-review-widget :is([role="button"], button, a[class*="btn"], a[class*="button"], a[class*="write"], [class*="write-rev"], [class*="writeReview"], [class*="write-review"]) {
+  border-radius: 999px !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+/* Secondary (outlined) buttons keep purple text */
+html body .jdgm-review-widget.jdgm-review-widget :is([class*="secondary"], [class*="outline"], [class*="filter"], [class*="sort"]),
+html body .jdgm-review-widget.jdgm-review-widget :is([class*="secondary"], [class*="outline"], [class*="filter"], [class*="sort"]) * {
+  color: #5b3f8c !important;
+  -webkit-text-fill-color: #5b3f8c !important;
 }
