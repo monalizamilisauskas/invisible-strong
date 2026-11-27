@@ -1,0 +1,262 @@
+{%- comment -%}
+  Warm header for collection pages (Shop, and every collection).
+  - Title: collection title, or the "All products" title for /collections/all.
+  - Intro: collection description, or the default intro.
+  - Pills: "All pieces" + the chosen collections that have products.
+{%- endcomment -%}
+
+{%- liquid
+  assign c = closest.collection | default: collection
+  assign is_all = false
+  if c.handle == 'all' or c == blank
+    assign is_all = true
+  endif
+
+  if is_all
+    assign hero_title = section.settings.all_title
+  else
+    assign hero_title = c.title
+  endif
+
+  if c.description != blank and is_all == false
+    assign hero_intro = c.description
+  else
+    assign hero_intro = section.settings.intro
+  endif
+-%}
+
+<section class="is-shop-hero" style="--shop-bg: {{ section.settings.background_color }};">
+  {% render 'diary-butterflies', variant: 'flutter' %}
+  <div class="is-shop-hero__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="is-shop-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="is-shop-hero__title">{{ hero_title }}</h1>
+    {% render 'diary-butterflies', variant: 'flourish' %}
+    {%- if hero_intro != blank -%}
+      <div class="is-shop-hero__intro">{{ hero_intro }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.collections.size > 0 -%}
+      <nav class="is-shop-hero__pills" aria-label="{{ section.settings.pills_label | escape }}">
+        <a
+          class="is-shop-pill{% if is_all %} is-shop-pill--active{% endif %}"
+          href="{{ routes.all_products_collection_url }}"
+          {% if is_all %}aria-current="page"{% endif %}
+        >
+          {{- section.settings.all_label -}}
+        </a>
+        {%- for pill in section.settings.collections -%}
+          {%- if pill.products_count > 0 -%}
+            {%- assign active = false -%}
+            {%- if pill.handle == c.handle -%}{%- assign active = true -%}{%- endif -%}
+            <a
+              class="is-shop-pill{% if active %} is-shop-pill--active{% endif %}"
+              href="{{ pill.url }}"
+              {% if active %}aria-current="page"{% endif %}
+            >
+              {{- pill.title -}}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .is-shop-hero {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 64px 20px 48px;
+    text-align: center;
+    color: #3a3a3a;
+    background:
+      radial-gradient(circle at 12% 22%, rgba(201, 168, 106, 0.18), transparent 45%),
+      radial-gradient(circle at 88% 10%, rgba(142, 107, 191, 0.22), transparent 50%),
+      linear-gradient(180deg, #efe7f5 0%, var(--shop-bg, #f7f2ec) 100%);
+  }
+  .is-shop-hero__inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .is-shop-hero__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 10px;
+  }
+  .is-shop-hero__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(32px, 4.6vw, 52px);
+    line-height: 1.15;
+    color: #5b3f8c;
+    margin: 0 0 16px;
+  }
+  .is-shop-hero__intro {
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 18px auto 0;
+  }
+  .is-shop-hero__intro p {
+    margin: 0;
+  }
+  .is-shop-hero__pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .is-shop-pill {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #c9b6e0;
+    background: rgba(255, 255, 255, 0.75);
+    color: #5b3f8c;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .is-shop-pill:hover,
+  .is-shop-pill:focus-visible {
+    border-color: #8e6bbf;
+    background: #fff;
+  }
+  .is-shop-pill--active {
+    background: #5b3f8c;
+    border-color: #5b3f8c;
+    color: #fff;
+  }
+  .is-shop-pill--active:hover {
+    background: #5b3f8c;
+  }
+  /* Extra line inside product cards (custom-liquid block in templates/collection.json) */
+  .is-card-extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 8px 0;
+  }
+  .is-card-extra__tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a8823f;
+  }
+  .is-card-extra__cta {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #5b3f8c;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 1px;
+  }
+  @media (max-width: 640px) {
+    .is-shop-hero {
+      padding: 44px 16px 32px;
+    }
+    .is-shop-hero__intro {
+      font-size: 16px;
+    }
+    .is-shop-hero__pills {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      margin-left: -16px;
+      margin-right: -16px;
+      padding: 0 16px 4px;
+      scrollbar-width: none;
+    }
+    .is-shop-pill {
+      flex: 0 0 auto;
+      font-size: 14px;
+    }
+    .is-card-extra {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 0 4px;
+    }
+    .is-card-extra__tag {
+      font-size: 10px;
+    }
+    .is-card-extra__cta {
+      margin-left: 0;
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection header",
+  "tag": "div",
+  "class": "is-shop-hero-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Invisible Strong"
+    },
+    {
+      "type": "text",
+      "id": "all_title",
+      "label": "Title for \"All products\"",
+      "default": "Find your piece"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Default intro",
+      "info": "Used when the collection has no description (and on All products).",
+      "default": "<p>Gifts created by a woman living with fibromyalgia — for every warrior fighting a battle no one can see, and for the people who love them.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Category pills"
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "\"All\" pill label",
+      "default": "All pieces"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections",
+      "info": "Only collections with products are shown.",
+      "limit": 8
+    },
+    {
+      "type": "text",
+      "id": "pills_label",
+      "label": "Pills accessibility label",
+      "default": "Shop by category"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f7f2ec"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection header"
+    }
+  ]
+}
+{% endschema %}
