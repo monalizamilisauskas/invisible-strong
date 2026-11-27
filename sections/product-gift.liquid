@@ -1,0 +1,471 @@
+{%- comment -%}
+  "What's inside the gift" + founder note, below the product.
+  - The message card quote comes from the product metafield custom.message_card
+    (falls back to the card text setting).
+  - Products tagged `no-message-card` skip the gift cards and show only the founder note.
+{%- endcomment -%}
+
+{%- liquid
+  assign p = closest.product
+  if p == blank
+    assign p = product
+  endif
+  assign show_gift = true
+  if p.tags contains 'no-message-card'
+    assign show_gift = false
+  endif
+  assign card_quote = p.metafields.custom.message_card.value
+-%}
+
+<section class="is-gift" style="--gift-bg: {{ section.settings.background_color }};">
+  {% render 'diary-butterflies', variant: 'flutter' %}
+  <div class="is-gift__inner">
+    {%- if show_gift -%}
+      <header class="is-gift__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="is-gift__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="is-gift__title">{{ section.settings.heading }}</h2>
+        {% render 'diary-butterflies', variant: 'flourish' %}
+      </header>
+
+      <ol class="is-gift__grid" role="list">
+        <li class="is-gift__card">
+          <span class="is-gift__media">
+            {%- if p.featured_image -%}
+              {{ p.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: p.title }}
+            {%- endif -%}
+          </span>
+          <span class="is-gift__step">1</span>
+          <h3 class="is-gift__card-title">{{ section.settings.piece_title }}</h3>
+          <p class="is-gift__card-text">{{ section.settings.piece_text }}</p>
+        </li>
+
+        <li class="is-gift__card">
+          <span class="is-gift__media is-gift__media--icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <rect x="10" y="16" width="44" height="32" rx="4"/>
+              <path d="m10 20 22 15 22-15"/>
+              <path d="M32 44c-3-2.6-6-4.8-6-7.6a3.2 3.2 0 0 1 6-1.6 3.2 3.2 0 0 1 6 1.6c0 2.8-3 5-6 7.6z" class="is-gift__heart"/>
+            </svg>
+          </span>
+          <span class="is-gift__step">2</span>
+          <h3 class="is-gift__card-title">{{ section.settings.card_title }}</h3>
+          {%- if card_quote != blank -%}
+            <blockquote class="is-gift__quote">{{ card_quote | newline_to_br }}</blockquote>
+          {%- else -%}
+            <p class="is-gift__card-text">{{ section.settings.card_text }}</p>
+          {%- endif -%}
+        </li>
+
+        <li class="is-gift__card">
+          <span class="is-gift__media is-gift__media--icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <rect x="10" y="24" width="44" height="30" rx="3"/>
+              <rect x="7" y="17" width="50" height="9" rx="2"/>
+              <path d="M32 17v37"/>
+              <path d="M32 17c-3-7-12-8-12-2.5S28 17 32 17c4 0 12 .5 12-2.5S35 10 32 17z"/>
+            </svg>
+          </span>
+          <span class="is-gift__step">3</span>
+          <h3 class="is-gift__card-title">{{ section.settings.box_title }}</h3>
+          <p class="is-gift__card-text">{{ section.settings.box_text }}</p>
+        </li>
+      </ol>
+    {%- endif -%}
+
+    {%- if section.settings.show_founder -%}
+      <aside class="is-gift__founder">
+        <span class="is-gift__avatar">
+          {%- if section.settings.founder_image -%}
+            {{ section.settings.founder_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: section.settings.founder_name }}
+          {%- else -%}
+            {{ section.settings.founder_name | slice: 0 }}
+          {%- endif -%}
+        </span>
+        <div class="is-gift__founder-body">
+          <p class="is-gift__founder-text">{{ section.settings.founder_text }}</p>
+          <p class="is-gift__founder-name">— {{ section.settings.founder_name }}</p>
+        </div>
+        {%- if section.settings.founder_button != blank -%}
+          <a class="is-gift__btn" href="{{ section.settings.founder_link | default: '/pages/our-story' }}">
+            {{- section.settings.founder_button }} <span aria-hidden="true">→</span>
+          </a>
+        {%- endif -%}
+      </aside>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .is-gift {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 72px 20px 80px;
+    color: #3a3a3a;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(201, 168, 106, 0.16), transparent 42%),
+      radial-gradient(circle at 88% 12%, rgba(142, 107, 191, 0.18), transparent 48%),
+      var(--gift-bg, #f5f0f7);
+  }
+  .is-gift * {
+    box-sizing: border-box;
+  }
+  .is-gift__inner {
+    position: relative;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+  .is-gift__header {
+    text-align: center;
+    margin: 0 auto 40px;
+  }
+  .is-gift__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 10px;
+  }
+  .is-gift__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.2;
+    color: #5b3f8c;
+    margin: 0 0 16px;
+  }
+  .is-gift__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .is-gift__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 24px 30px;
+    box-shadow: 0 6px 24px rgba(91, 63, 140, 0.08);
+  }
+  .is-gift__media {
+    display: grid;
+    place-items: center;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+    border: 2px solid #efe7f5;
+    margin-bottom: 18px;
+  }
+  .is-gift__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .is-gift__media--icon {
+    background: linear-gradient(135deg, #efe7f5 0%, #f5ecdf 100%);
+    border-color: transparent;
+  }
+  .is-gift__media--icon svg {
+    width: 64px;
+    height: 64px;
+    fill: none;
+    stroke: #5b3f8c;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .is-gift__media--icon .is-gift__heart {
+    fill: #c9a86a;
+    stroke: #c9a86a;
+  }
+  .is-gift__step {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #5b3f8c;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .is-gift__card-title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.3;
+    color: #5b3f8c;
+    margin: 0 0 8px;
+  }
+  .is-gift__card-text {
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0;
+  }
+  .is-gift__quote {
+    margin: 4px 0 0;
+    padding: 0 0 0 14px;
+    border-left: 2px solid #c9a86a;
+    text-align: left;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #5b3f8c;
+  }
+  .is-gift__founder {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 18px;
+    border-top: 2px solid #c9a86a;
+  }
+  .is-gift__grid + .is-gift__founder {
+    margin-top: 32px;
+  }
+  .is-gift__avatar {
+    flex: 0 0 76px;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: #8e6bbf;
+    color: #fff;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 28px;
+    border: 2px solid #c9a86a;
+  }
+  .is-gift__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .is-gift__founder-body {
+    flex: 1;
+  }
+  .is-gift__founder-text {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: #5b3f8c;
+    margin: 0 0 4px;
+  }
+  .is-gift__founder-name {
+    font-size: 14px;
+    color: #6f6670;
+    margin: 0;
+  }
+  .is-gift__btn {
+    flex: 0 0 auto;
+    display: inline-block;
+    background: #8e6bbf;
+    color: #fff;
+    border-radius: 999px;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .is-gift__btn:hover {
+    background: #5b3f8c;
+  }
+  @media (max-width: 760px) {
+    .is-gift {
+      padding: 52px 16px 60px;
+    }
+    .is-gift__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .is-gift__card {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      grid-template-rows: auto auto;
+      column-gap: 16px;
+      row-gap: 4px;
+      align-items: center;
+      text-align: left;
+      padding: 20px 18px;
+    }
+    .is-gift__media {
+      grid-row: 1 / span 2;
+      width: 84px;
+      height: 84px;
+      margin: 0;
+    }
+    .is-gift__media--icon svg {
+      width: 44px;
+      height: 44px;
+    }
+    .is-gift__card-title {
+      font-size: 19px;
+      margin: 0;
+      align-self: end;
+    }
+    .is-gift__card-text,
+    .is-gift__quote {
+      align-self: start;
+      font-size: 14px;
+    }
+    .is-gift__step {
+      top: 10px;
+      left: 10px;
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+    }
+    .is-gift__founder {
+      flex-direction: column;
+      text-align: center;
+      padding: 26px 20px;
+    }
+    .is-gift .is-butterfly--c {
+      top: 1.5%;
+      right: 4%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product: inside the gift",
+  "tag": "div",
+  "class": "is-gift-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Ready to give"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's inside the gift"
+    },
+    {
+      "type": "header",
+      "content": "1. The piece"
+    },
+    {
+      "type": "text",
+      "id": "piece_title",
+      "label": "Title",
+      "default": "Your piece"
+    },
+    {
+      "type": "textarea",
+      "id": "piece_text",
+      "label": "Text",
+      "default": "Made to order in the US, for someone fighting a battle no one can see."
+    },
+    {
+      "type": "header",
+      "content": "2. Message card"
+    },
+    {
+      "type": "paragraph",
+      "content": "If the product has the metafield \"Message card\" (custom.message_card), its text is shown as a quote instead of the text below."
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "Title",
+      "default": "A heartfelt message card"
+    },
+    {
+      "type": "textarea",
+      "id": "card_text",
+      "label": "Text",
+      "default": "Words that say what's hard to say out loud — so your gift speaks for you."
+    },
+    {
+      "type": "header",
+      "content": "3. Packaging"
+    },
+    {
+      "type": "text",
+      "id": "box_title",
+      "label": "Title",
+      "default": "Gift-ready packaging"
+    },
+    {
+      "type": "textarea",
+      "id": "box_text",
+      "label": "Text",
+      "default": "It arrives ready to give — no wrapping needed."
+    },
+    {
+      "type": "header",
+      "content": "Founder note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_founder",
+      "label": "Show founder note",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "Photo"
+    },
+    {
+      "type": "textarea",
+      "id": "founder_text",
+      "label": "Text",
+      "default": "I live with fibromyalgia. I made this piece for the days you need to feel seen — and for the people who love you through them."
+    },
+    {
+      "type": "text",
+      "id": "founder_name",
+      "label": "Name",
+      "default": "Monaliza, founder"
+    },
+    {
+      "type": "text",
+      "id": "founder_button",
+      "label": "Button label",
+      "default": "Read my story"
+    },
+    {
+      "type": "url",
+      "id": "founder_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f0f7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product: inside the gift"
+    }
+  ]
+}
+{% endschema %}
