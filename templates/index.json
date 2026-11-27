@@ -28,6 +28,7 @@
         "slide_2": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Capa_2.jpg",
             "image_position": "30%",
             "mobile_focus_x": 75,
             "title": "Three words she needs to hear:\nI believe you.",
@@ -39,6 +40,7 @@
         "slide_3": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Capa_3.jpg",
             "image_position": "30%",
             "mobile_focus_x": 65,
             "title": "Not fine,\nbut still here.",
@@ -50,6 +52,7 @@
         "slide_4": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Capa_4.jpg",
             "image_position": "30%",
             "mobile_focus_x": 65,
             "title": "A quiet reminder\nof your strength.",
@@ -61,6 +64,7 @@
         "slide_5": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/capa_5.jpg",
             "image_position": "center",
             "mobile_focus_x": 70,
             "title": "Every necklace comes with\na heartfelt message.",
@@ -165,6 +169,7 @@
         "text_YJpNiU",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "video",
@@ -200,8 +205,7 @@
         "reflection_opacity": 25,
         "padding-block-start": 100,
         "padding-block-end": 75
-      },
-      "disabled": true
+      }
     },
     "custom_liquid_needs": {
       "type": "custom-liquid",
