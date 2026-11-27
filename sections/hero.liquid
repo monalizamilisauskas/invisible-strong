@@ -59,6 +59,8 @@
     assign has_only_video_mobile = true
   endif
 
+  assign image_1_position = section.settings.image_1_position | default: 'center'
+  assign image_1_position_style = 'object-position: center ' | append: image_1_position | append: ';'
   assign media_wrapper_desktop_class = 'hero__media-wrapper hero__media-wrapper--desktop'
   assign media_wrapper_mobile_class = 'hero__media-wrapper hero__media-wrapper--mobile'
   # If there is no custom mobile media to show, we add the mobile class to the desktop classes so content is always shown on mobile.
@@ -143,6 +145,7 @@
           class: 'hero__media',
           sizes: sizes,
           fetchpriority: fetch_priority,
+          style: image_1_position_style,
           data-testid: 'hero-desktop-image-1'
       }}
     </picture>
@@ -159,6 +162,7 @@
           class: 'hero__media',
           sizes: sizes,
           fetchpriority: fetch_priority,
+          style: image_1_position_style,
           data-testid: 'hero-desktop-image-1'
       }}
     </div>
@@ -829,6 +833,19 @@
       "type": "image_picker",
       "id": "image_1",
       "label": "t:settings.image",
+      "visible_if": "{{ section.settings.media_type_1 == 'image' }}"
+    },
+    {
+      "type": "select",
+      "id": "image_1_position",
+      "label": "Image position",
+      "info": "Which part of the image stays visible when it is cropped.",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center",
       "visible_if": "{{ section.settings.media_type_1 == 'image' }}"
     },
     {
