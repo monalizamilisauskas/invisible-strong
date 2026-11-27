@@ -208,14 +208,53 @@
         "padding-block-end": 75
       }
     },
-    "custom_liquid_needs": {
-      "type": "custom-liquid",
+    "needs_cards": {
+      "type": "needs-cards",
+      "blocks": {
+        "card_gifts": {
+          "type": "card",
+          "settings": {
+            "collection": "gifts-that-say-i-believe-you",
+            "tag": "For someone you love",
+            "title": "Gifts that say “I believe you”",
+            "text": "Jewelry with a heartfelt message card, ready to give.",
+            "button_label": "Shop",
+            "show_price": true
+          }
+        },
+        "card_spoon": {
+          "type": "card",
+          "settings": {
+            "collection": "for-spoon-days",
+            "tag": "For you, on hard days",
+            "title": "For spoon days",
+            "text": "Soft, cozy crewnecks for the days you need to rest.",
+            "button_label": "Shop",
+            "show_price": true
+          }
+        },
+        "card_all": {
+          "type": "card",
+          "settings": {
+            "collection": "",
+            "tag": "Explore",
+            "title": "Not sure yet?",
+            "text": "Browse every piece — jewelry, cozy crewnecks and little everyday reminders.",
+            "button_label": "Browse",
+            "show_price": false
+          }
+        }
+      },
+      "block_order": [
+        "card_gifts",
+        "card_spoon",
+        "card_all"
+      ],
       "settings": {
-        "custom_liquid": "<style>\n  .is-needs{display:block;width:100%;box-sizing:border-box;background:transparent;padding:64px 20px 32px}\n  .is-needs *{box-sizing:border-box}\n  .is-needs__inner{max-width:1120px;margin:0 auto}\n  .is-needs__eyebrow{text-align:center;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#8E6BBF;margin:0 0 10px}\n  .is-needs__title{text-align:center;font-family:\"Playfair Display\",Georgia,serif;font-size:clamp(28px,3.4vw,42px);color:#5B3F8C;margin:0 0 12px;font-weight:400}\n  .is-needs__sub{text-align:center;font-size:17px;line-height:1.6;color:#3A3A3A;margin:0 auto 40px;max-width:560px}\n  .is-needs__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}\n  .is-need{display:flex;flex-direction:column;background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;box-shadow:0 6px 24px rgba(91,63,140,.08);transition:transform .25s ease,box-shadow .25s ease}\n  .is-need:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(91,63,140,.16)}\n  .is-need__mosaic{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px;background:#F5F0F7;aspect-ratio:1/1}\n  .is-need__mosaic--1{grid-template-columns:1fr}\n  .is-need__tile{position:relative;overflow:hidden;border-radius:10px;background:#fff}\n  .is-need__tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}\n  .is-need:hover .is-need__tile img{transform:scale(1.04)}\n  .is-need__body{padding:22px 24px 26px;display:flex;flex-direction:column;gap:8px;flex:1}\n  .is-need__name{font-family:\"Playfair Display\",Georgia,serif;font-size:22px;line-height:1.3;margin:0;font-weight:400;color:#5B3F8C}\n  .is-need__text{font-size:15px;line-height:1.55;margin:0;color:#3A3A3A;flex:1}\n  .is-need__cta{margin-top:8px;align-self:flex-start;font-size:14px;font-weight:600;letter-spacing:.04em;color:#5B3F8C;border-bottom:1.5px solid #C9A86A;padding-bottom:2px}\n  @media(max-width:900px){.is-needs__grid{grid-template-columns:1fr 1fr}}\n  @media(max-width:600px){.is-needs{padding:48px 16px 24px}.is-needs__grid{grid-template-columns:1fr;gap:20px}.is-needs__sub{font-size:16px;margin-bottom:28px}}\n  @media(prefers-reduced-motion:reduce){.is-need,.is-need__tile img{transition:none}.is-need:hover,.is-need:hover .is-need__tile img{transform:none}}\n</style>\n{%- assign is_need_count = 0 -%}\n{%- assign is_used = '|' -%}\n{%- capture is_need_cards -%}\n  {%- assign needs = 'gifts-that-say-i-believe-you|for-spoon-days|all' | split: '|' -%}\n  {%- for handle in needs -%}\n    {%- if handle == 'all' -%}\n      {%- assign c = collections.all -%}\n    {%- else -%}\n      {%- assign c = collections[handle] -%}\n    {%- endif -%}\n    {%- assign c_count = 0 -%}\n    {%- if c.handle == handle -%}{%- assign c_count = c.products_count | plus: 0 -%}{%- endif -%}\n    {%- if c_count > 0 -%}\n      {%- assign is_need_count = is_need_count | plus: 1 -%}\n      {%- case handle -%}\n        {%- when 'gifts-that-say-i-believe-you' -%}{%- assign n_title = 'Gifts that say “I believe you”' -%}{%- assign n_text = 'Jewelry with a heartfelt message card, ready to give.' -%}{%- assign n_cta = 'Shop the jewelry' -%}\n        {%- when 'for-spoon-days' -%}{%- assign n_title = 'For spoon days' -%}{%- assign n_text = 'Soft, cozy pieces for the days you need to rest.' -%}{%- assign n_cta = 'Shop the crewnecks' -%}\n        {%- when 'all' -%}{%- assign n_title = 'Not sure yet?' -%}{%- assign n_text = 'Browse every piece — jewelry, cozy crewnecks and little everyday reminders.' -%}{%- assign n_cta = 'Browse all pieces' -%}\n      {%- endcase -%}\n      {%- assign tiles_keys = '' -%}\n      {%- capture tiles -%}\n        {%- assign shown = 0 -%}\n        {%- for pass in (1..2) -%}\n          {%- for p in c.products limit: 24 -%}\n            {%- if shown >= 4 -%}{%- break -%}{%- endif -%}\n            {%- if p.featured_image == blank or p.title contains 'Package Protection' -%}{%- continue -%}{%- endif -%}\n            {%- assign key = '|' | append: p.handle | append: '|' -%}\n            {%- if pass == 1 and is_used contains key -%}{%- continue -%}{%- endif -%}\n            {%- if tiles_keys contains key -%}{%- continue -%}{%- endif -%}\n            {%- assign tiles_keys = tiles_keys | append: key -%}\n            {%- assign is_used = is_used | append: p.handle | append: '|' -%}\n            {%- assign shown = shown | plus: 1 -%}\n            <span class=\"is-need__tile\">{{ p.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: p.title }}</span>\n          {%- endfor -%}\n        {%- endfor -%}\n      {%- endcapture -%}\n      <a class=\"is-need\" href=\"{{ c.url }}\">\n        <div class=\"is-need__mosaic{% if shown < 4 %} is-need__mosaic--1{% endif %}\">\n          {%- if shown >= 4 -%}{{ tiles }}{%- else -%}{{ tiles | split: '</span>' | first }}</span>{%- endif -%}\n        </div>\n        <div class=\"is-need__body\">\n          <h3 class=\"is-need__name\">{{ n_title }}</h3>\n          <p class=\"is-need__text\">{{ n_text }}</p>\n          <span class=\"is-need__cta\">{{ n_cta }} →</span>\n        </div>\n      </a>\n    {%- endif -%}\n  {%- endfor -%}\n{%- endcapture -%}\n{%- if is_need_count >= 2 -%}\n<section class=\"is-needs\">\n  <div class=\"is-needs__inner\">\n    <p class=\"is-needs__eyebrow\">Find the right piece</p>\n    <h2 class=\"is-needs__title\">What does your person need today?</h2>\n    <p class=\"is-needs__sub\">Choose the path that feels right — for them, or for you.</p>\n    <div class=\"is-needs__grid\">{{ is_need_cards }}</div>\n  </div>\n</section>\n{%- endif -%}",
-        "background_color": "",
-        "section_width": "page-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "eyebrow": "Find the right piece",
+        "heading": "What does your person need today?",
+        "subheading": "Choose the path that feels right — for them, or for you.",
+        "background_color": "#f5f0f7"
       }
     },
     "custom_liquid_zrdA3C": {
@@ -396,7 +435,7 @@
   "order": [
     "hero_slideshow",
     "hero_jVaWmY",
-    "custom_liquid_needs",
+    "needs_cards",
     "custom_liquid_zrdA3C",
     "founder_story",
     "custom_liquid_RUqFEM",
