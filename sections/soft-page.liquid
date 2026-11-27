@@ -37,33 +37,65 @@
 {%- if section.settings.content_style == 'faq' -%}
   <script>
     (function () {
+      function isQuestionParagraph(el) {
+        // <p><strong>Question?</strong></p>  (or <b>)
+        if (el.tagName !== 'P') return false;
+        var strong = el.querySelector(':scope > strong, :scope > b');
+        if (!strong) return false;
+        var text = el.textContent.trim();
+        var boldText = strong.textContent.trim();
+        return text.length > 0 && text.length < 200 && (text === boldText || /\?$/.test(boldText));
+      }
+      function isQuestion(el) {
+        return /^H[2-4]$/.test(el.tagName) || isQuestionParagraph(el);
+      }
+      function buildItem(summaryHtml, nodes) {
+        var details = document.createElement('details');
+        details.className = 'is-faq-item';
+        var summary = document.createElement('summary');
+        summary.innerHTML = summaryHtml;
+        var panel = document.createElement('div');
+        panel.className = 'is-faq-item__answer';
+        nodes.forEach(function (n) { panel.appendChild(n); });
+        details.appendChild(summary);
+        details.appendChild(panel);
+        return details;
+      }
       document.querySelectorAll('.is-soft-page--faq [data-soft-page-body]').forEach(function (body) {
         if (body.dataset.faqReady) return;
         body.dataset.faqReady = 'true';
-        // Unwrap a single wrapper element (text pasted inside a div/section)
         var root = body;
-        if (root.children.length === 1 && /^(DIV|SECTION)$/.test(root.children[0].tagName)) {
+        while (root.children.length === 1 && /^(DIV|SECTION|ARTICLE)$/.test(root.children[0].tagName)) {
           root = root.children[0];
         }
-        var headings = root.querySelectorAll(':scope > h2, :scope > h3, :scope > h4');
-        if (!headings.length) return;
-        headings.forEach(function (h) {
-          var details = document.createElement('details');
-          details.className = 'is-faq-item';
-          var summary = document.createElement('summary');
-          summary.innerHTML = h.innerHTML;
-          var panel = document.createElement('div');
-          panel.className = 'is-faq-item__answer';
-          var next = h.nextElementSibling;
-          while (next && !/^H[1-4]$/.test(next.tagName)) {
-            var move = next;
-            next = next.nextElementSibling;
-            panel.appendChild(move);
-          }
-          details.appendChild(summary);
-          details.appendChild(panel);
-          h.replaceWith(details);
-        });
+
+        // 1) Questions that already open and close (<details>): restyle them
+        var existing = root.querySelectorAll('details');
+        if (existing.length) {
+          existing.forEach(function (d) {
+            var summary = d.querySelector(':scope > summary');
+            if (!summary) return;
+            var rest = Array.prototype.slice.call(d.childNodes).filter(function (n) { return n !== summary; });
+            var item = buildItem(summary.textContent.trim(), rest);
+            d.replaceWith(item);
+          });
+        } else {
+          // 2) Headings (h2/h3/h4) or bold paragraphs become questions
+          var children = Array.prototype.slice.call(root.children);
+          var questions = children.filter(isQuestion);
+          if (!questions.length) return;
+          questions.forEach(function (q) {
+            var answer = [];
+            var next = q.nextElementSibling;
+            while (next && !isQuestion(next) && next.tagName !== 'H1') {
+              answer.push(next);
+              next = next.nextElementSibling;
+            }
+            var label = isQuestionParagraph(q) ? q.textContent.trim() : q.innerHTML;
+            var item = buildItem(label, answer);
+            q.replaceWith(item);
+          });
+        }
         var first = root.querySelector('.is-faq-item');
         if (first) first.open = true;
       });
