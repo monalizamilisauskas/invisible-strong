@@ -521,15 +521,15 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     }
   },
   "order": [
     "main",
     "product_gift",
-    "product_recommendations_qggXJq",
-    "1795778453c6a320f4"
+    "1795778453c6a320f4",
+    "product_recommendations_qggXJq"
   ]
 }
