@@ -8,6 +8,15 @@
 
 {%- assign used = '|' -%}
 
+<script>
+  window.isNdFallback = window.isNdFallback || function (img) {
+    var f = img.getAttribute('data-fallback');
+    if (f && img.getAttribute('src') !== f) {
+      img.setAttribute('src', f);
+    }
+  };
+</script>
+
 <section class="is-nd" style="--nd-bg: {{ section.settings.background_color }};">
   {% render 'diary-butterflies', variant: 'flutter' %}
   <div class="is-nd__inner">
@@ -62,10 +71,10 @@
             endif
             if thumb_count < 3
               assign used = used | append: p.handle | append: '|'
-              capture t
-                echo p.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: p.title
-              endcapture
-              assign thumbs = thumbs | append: t
+              assign t_src = p.featured_image | image_url: width: 160
+              assign t_full = p.featured_image | image_url: width: 5760
+              assign t_alt = p.title | escape
+              assign thumbs = thumbs | append: '<img src="' | append: t_src | append: '" data-fallback="' | append: t_full | append: '" alt="' | append: t_alt | append: '" width="160" height="160" onerror="isNdFallback(this)">'
               assign thumb_count = thumb_count | plus: 1
             endif
           endfor
@@ -84,16 +93,15 @@
         {%- if piece_count > 0 -%}
           <a class="is-nd__card" href="{{ c.url }}" {{ block.shopify_attributes }}>
             {%- if hero -%}
-              {{
-                hero
-                | image_url: width: 900
-                | image_tag:
-                  class: 'is-nd__bg',
-                  loading: 'lazy',
-                  widths: '400, 600, 900',
-                  sizes: '(min-width: 990px) 380px, (min-width: 600px) 45vw, 82vw',
-                  alt: hero_alt
-              }}
+              <img
+                class="is-nd__bg"
+                src="{{ hero | image_url: width: 900 }}"
+                data-fallback="{{ hero | image_url: width: 5760 }}"
+                alt="{{ hero_alt | escape }}"
+                width="900"
+                height="1215"
+                onerror="isNdFallback(this)"
+              >
             {%- endif -%}
             <div class="is-nd__panel">
               {%- if block.settings.tag != blank -%}
