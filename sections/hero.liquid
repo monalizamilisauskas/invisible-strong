@@ -59,6 +59,10 @@
     assign has_only_video_mobile = true
   endif
 
+  assign video_1_poster = nil
+  if section.settings.image_1 != blank
+    assign video_1_poster = section.settings.image_1 | image_url: width: 1920
+  endif
   assign image_1_position = section.settings.image_1_position | default: 'center'
   assign image_1_position_style = 'object-position: center ' | append: image_1_position | append: ';'
   assign media_wrapper_desktop_class = 'hero__media-wrapper hero__media-wrapper--desktop'
@@ -173,12 +177,15 @@
       {{
         section.settings.video_1
         | video_tag:
-          poster: nil,
+          poster: video_1_poster,
           autoplay: true,
           loop: true,
           controls: false,
           muted: true,
+          playsinline: true,
           class: 'hero__media',
+          style: image_1_position_style,
+          data-hero-video: '',
           data-testid: 'hero-desktop-video-1'
       }}
     </div>
@@ -556,6 +563,16 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[data-hero-video]').forEach(function (v) {
+      v.removeAttribute('autoplay');
+      v.pause();
+    });
+  })();
+</script>
 
 {% stylesheet %}
   .hero-wrapper {
