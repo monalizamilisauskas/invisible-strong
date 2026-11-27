@@ -491,9 +491,19 @@
             "show_shop_reviews": false,
             "empty_state": "empty_widget"
           }
+        },
+        "reviews_heading": {
+          "type": "soft-heading",
+          "settings": {
+            "eyebrow": "From our community",
+            "heading": "Real words, real strength",
+            "show_flourish": true
+          },
+          "blocks": {}
         }
       },
       "block_order": [
+        "reviews_heading",
         "judge_me_reviews_review_widget_r4Ewfy"
       ],
       "settings": {
@@ -502,14 +512,14 @@
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
+        "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
+        "gap": 8,
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "",
+        "background_color": "#f5f0f7",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -521,15 +531,15 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 72,
+        "padding-block-end": 80
       }
     }
   },
   "order": [
     "main",
     "product_gift",
-    "product_recommendations_qggXJq",
-    "1795778453c6a320f4"
+    "1795778453c6a320f4",
+    "product_recommendations_qggXJq"
   ]
 }

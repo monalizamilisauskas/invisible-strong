@@ -1,0 +1,228 @@
+/*
+  Invisible Strong — Judge.me reviews in the brand style.
+  Selectors are prefixed with "html body" so they win over the app's own CSS
+  regardless of load order. Colors set in the Judge.me app (purple button,
+  gold stars) are kept; this file adds typography, spacing and cards.
+*/
+
+/* ---------- Product page review widget ---------- */
+html body .jdgm-widget.jdgm-review-widget,
+html body .jdgm-rev-widg {
+  font-family: var(--font-body--family, 'Lato', sans-serif);
+  color: #3a3a3a;
+}
+
+html body .jdgm-review-widget {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Title */
+html body .jdgm-rev-widg__title,
+html body .jdgm-review-widget h2 {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
+  font-weight: 400 !important;
+  font-size: clamp(28px, 3.4vw, 40px) !important;
+  line-height: 1.2 !important;
+  color: #5b3f8c !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* Summary: average + count */
+html body .jdgm-rev-widg__summary-text,
+html body .jdgm-rev-widg__summary-average {
+  color: #5f5866 !important;
+  font-size: 15px !important;
+}
+
+/* Stars (gold) */
+html body .jdgm-star,
+html body .jdgm-review-widget .jdgm-star {
+  color: #c9a86a !important;
+}
+
+/* Main button: Write a review */
+html body .jdgm-write-rev-link,
+html body .jdgm-ask-question-btn,
+html body .jdgm-review-widget .jdgm-write-rev-link {
+  background: #5b3f8c !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  font-family: var(--font-body--family, 'Lato', sans-serif) !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.02em !important;
+  padding: 13px 28px !important;
+  box-shadow: 0 6px 18px rgba(91, 63, 140, 0.18) !important;
+  transition: background 0.2s ease !important;
+}
+html body .jdgm-write-rev-link:hover,
+html body .jdgm-ask-question-btn:hover {
+  background: #4a2f75 !important;
+}
+
+/* Secondary controls (filter / sort) */
+html body .jdgm-review-widget button:not(.jdgm-write-rev-link):not(.jdgm-ask-question-btn),
+html body .jdgm-review-widget select {
+  border-radius: 12px !important;
+  border-color: #d9c9ec !important;
+  color: #5b3f8c !important;
+}
+
+/* Histogram bars */
+html body .jdgm-histogram__bar-content {
+  background: #c9a86a !important;
+}
+html body .jdgm-histogram__bar {
+  background: #efe7f5 !important;
+  border-radius: 999px !important;
+  overflow: hidden;
+}
+
+/* Photo/video strip */
+html body .jdgm-review-widget img,
+html body .jdgm-review-widget video,
+html body .jdgm-rev__pic-link,
+html body .jdgm-media-carousel img {
+  border-radius: 12px !important;
+}
+
+/* Each review as a soft white card */
+html body .jdgm-rev {
+  background: #fff !important;
+  border: 1px solid #ece3f3 !important;
+  border-radius: 18px !important;
+  padding: 24px 26px !important;
+  margin: 0 0 16px !important;
+  box-shadow: 0 6px 20px rgba(91, 63, 140, 0.06) !important;
+}
+
+html body .jdgm-rev__title {
+  display: block;
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
+  font-weight: 400 !important;
+  font-size: 21px !important;
+  line-height: 1.35 !important;
+  color: #5b3f8c !important;
+  margin: 6px 0 8px !important;
+}
+
+html body .jdgm-rev__body,
+html body .jdgm-rev__body p {
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+  color: #3a3a3a !important;
+}
+
+html body .jdgm-rev__author,
+html body .jdgm-rev__author-wrapper {
+  font-weight: 600 !important;
+  color: #3a3a3a !important;
+}
+html body .jdgm-rev__timestamp {
+  color: #8a8290 !important;
+  font-size: 13px !important;
+}
+
+/* Avatar initial */
+html body .jdgm-rev__icon {
+  background: #efe7f5 !important;
+  color: #5b3f8c !important;
+  border-radius: 50% !important;
+}
+
+/* Verified badge */
+html body .jdgm-rev__buyer-badge,
+html body .jdgm-verified-badge {
+  background: #f6efe2 !important;
+  color: #8a6a2e !important;
+  border: 1px solid #e6d5b3 !important;
+  border-radius: 999px !important;
+}
+
+/* Links (read more, pagination) */
+html body .jdgm-review-widget a:not(.jdgm-write-rev-link):not(.jdgm-rev__pic-link) {
+  color: #5b3f8c !important;
+  text-decoration-color: #c9a86a !important;
+}
+html body .jdgm-paginate__page.jdgm-curt {
+  color: #5b3f8c !important;
+  font-weight: 700 !important;
+}
+
+/* Empty state (no reviews yet) */
+html body .jdgm-rev-widg__summary-text:only-child,
+html body .jdgm-rev-widg--none .jdgm-rev-widg__summary-text {
+  font-style: italic;
+}
+
+/* ---------- Star badge on product cards and product title ---------- */
+html body .jdgm-prev-badge,
+html body .jdgm-preview-badge {
+  font-size: 13px !important;
+}
+html body .jdgm-prev-badge__text {
+  color: #8a8290 !important;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  html body .jdgm-rev {
+    padding: 18px 18px !important;
+    border-radius: 16px !important;
+  }
+  html body .jdgm-rev__title {
+    font-size: 19px !important;
+  }
+  html body .jdgm-write-rev-link {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------- Section polish (product page) ---------- */
+/* Our own heading ("Real words, real strength") replaces the app title */
+html body .jdgm-rev-widg__title {
+  display: none !important;
+}
+
+/* Summary + button inside a centered white card */
+html body .jdgm-rev-widg__header {
+  background: #fff !important;
+  border: 1px solid #ece3f3 !important;
+  border-radius: 20px !important;
+  padding: 26px 30px !important;
+  margin: 8px auto 28px !important;
+  box-shadow: 0 10px 30px rgba(91, 63, 140, 0.08) !important;
+  text-align: center !important;
+}
+html body .jdgm-rev-widg__summary {
+  text-align: center !important;
+}
+html body .jdgm-rev-widg__summary-average,
+html body .jdgm-rev-widg__summary-rating {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif) !important;
+  font-size: 44px !important;
+  line-height: 1 !important;
+  color: #5b3f8c !important;
+}
+html body .jdgm-rev-widg__header .jdgm-star {
+  font-size: 22px !important;
+}
+
+/* Reviews in two columns on large screens */
+@media (min-width: 990px) {
+  html body .jdgm-rev-widg__reviews {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  html body .jdgm-rev-widg__reviews .jdgm-rev {
+    margin: 0 !important;
+  }
+}
