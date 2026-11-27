@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -38,6 +39,7 @@
             "media_columns": "one",
             "image_gap": 4,
             "large_first_image": false,
+            "icons_style": "arrow",
             "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "thumbnails",
             "thumbnail_position": "left",
@@ -116,6 +118,7 @@
                 "border_opacity": 100,
                 "border_color": "",
                 "border_radius": 0,
+                "link": "",
                 "open_in_new_tab": false,
                 "placeholder": "",
                 "padding-block-start": 0,
@@ -225,6 +228,7 @@
                 "stacking": true,
                 "text_color": "",
                 "show_pickup_availability": false,
+                "show_physical_stores": true,
                 "gift_card_form": true,
                 "recipient_button_style": "default",
                 "recipient_button_background": "{{ settings.color_palette.background }}",
@@ -323,9 +327,38 @@
         "padding-block-end": 0
       }
     },
+    "product_gift": {
+      "type": "product-gift",
+      "settings": {
+        "eyebrow": "Ready to give",
+        "heading": "What's inside the gift",
+        "piece_title": "Your piece",
+        "piece_text": "Chosen for someone fighting a battle no one can see.",
+        "card_title": "A heartfelt message card",
+        "card_text": "Words that say what's hard to say out loud — so your gift speaks for you.",
+        "box_title": "Gift-ready packaging",
+        "box_text": "It arrives ready to give — no wrapping needed.",
+        "show_founder": true,
+        "founder_image": "shopify://shop_images/Gemini_Generated_Image_mi3zlqmi3zlqmi3z.jpg",
+        "founder_text": "I live with fibromyalgia. I made this piece for the days you need to feel seen — and for the people who love you through them.",
+        "founder_name": "Monaliza, founder",
+        "founder_button": "Read my story",
+        "founder_link": "shopify://pages/our-story",
+        "background_color": "#f5f0f7"
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
+        "soft_heading": {
+          "type": "soft-heading",
+          "settings": {
+            "eyebrow": "More pieces with meaning",
+            "heading": "You may also like",
+            "show_flourish": true
+          },
+          "blocks": {}
+        },
         "static-product-card": {
           "type": "_product-card",
           "name": "t:names.product_card",
@@ -422,15 +455,6 @@
             "price_gLWgA6",
             "card_extra"
           ]
-        },
-        "soft_heading": {
-          "type": "soft-heading",
-          "settings": {
-            "eyebrow": "More pieces with meaning",
-            "heading": "You may also like",
-            "show_flourish": true
-          },
-          "blocks": {}
         }
       },
       "block_order": [
@@ -456,30 +480,56 @@
         "padding-block-end": 72
       }
     },
-    "product_gift": {
-      "type": "product-gift",
+    "1795778453c6a320f4": {
+      "type": "_blocks",
+      "blocks": {
+        "judge_me_reviews_review_widget_r4Ewfy": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_r4Ewfy"
+      ],
       "settings": {
-        "eyebrow": "Ready to give",
-        "heading": "What's inside the gift",
-        "piece_title": "Your piece",
-        "piece_text": "Chosen for someone fighting a battle no one can see.",
-        "card_title": "A heartfelt message card",
-        "card_text": "Words that say what's hard to say out loud — so your gift speaks for you.",
-        "box_title": "Gift-ready packaging",
-        "box_text": "It arrives ready to give — no wrapping needed.",
-        "show_founder": true,
-        "founder_image": "shopify://shop_images/Gemini_Generated_Image_mi3zlqmi3zlqmi3z.jpg",
-        "founder_text": "I live with fibromyalgia. I made this piece for the days you need to feel seen — and for the people who love you through them.",
-        "founder_name": "Monaliza, founder",
-        "founder_button": "Read my story",
-        "founder_link": "shopify://pages/our-story",
-        "background_color": "#f5f0f7"
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   },
   "order": [
     "main",
     "product_gift",
-    "product_recommendations_qggXJq"
+    "product_recommendations_qggXJq",
+    "1795778453c6a320f4"
   ]
 }
