@@ -1,0 +1,40 @@
+{%- comment -%}
+  Short emotional line under the price.
+  Reads the product metafield custom.tagline (single line text).
+  Renders nothing when the metafield is empty.
+{%- endcomment -%}
+
+{%- assign tagline = closest.product.metafields.custom.tagline.value -%}
+
+{%- if tagline != blank -%}
+  <p class="is-product-tagline" {{ block.shopify_attributes }}>{{ tagline }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .is-product-tagline {
+    margin: 2px 0 0;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    color: #5b3f8c;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product tagline",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the product metafield \"Tagline\" (custom.tagline). Hidden when empty."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tagline"
+    }
+  ]
+}
+{% endschema %}

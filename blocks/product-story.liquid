@@ -1,0 +1,177 @@
+{%- comment -%}
+  Product description shown as a soft quote card, followed by
+  expandable details. Each tab is hidden while it has no content:
+  - Size & fit       → product metafield custom.size_fit (multi-line text)
+  - Fabric & care    → product metafield custom.fabric_care (multi-line text)
+  - Shipping & returns → block setting (same text for every product)
+{%- endcomment -%}
+
+{%- liquid
+  assign p = closest.product
+  assign size_fit = p.metafields.custom.size_fit.value
+  assign fabric_care = p.metafields.custom.fabric_care.value
+  assign shipping = block.settings.shipping_returns
+-%}
+
+<div class="is-product-story" {{ block.shopify_attributes }}>
+  {%- if p.description != blank -%}
+    <div class="is-product-story__quote">
+      {%- if block.settings.eyebrow != blank -%}
+        <p class="is-product-story__eyebrow">{{ block.settings.eyebrow }}</p>
+      {%- endif -%}
+      <div class="is-product-story__text">{{ p.description }}</div>
+    </div>
+  {%- endif -%}
+
+  {%- if size_fit != blank or fabric_care != blank or shipping != blank -%}
+    <div class="is-product-story__tabs">
+      {%- if size_fit != blank -%}
+        <details class="is-product-story__tab">
+          <summary>{{ block.settings.size_label }}</summary>
+          <div class="is-product-story__panel">{{ size_fit | newline_to_br }}</div>
+        </details>
+      {%- endif -%}
+      {%- if fabric_care != blank -%}
+        <details class="is-product-story__tab">
+          <summary>{{ block.settings.fabric_label }}</summary>
+          <div class="is-product-story__panel">{{ fabric_care | newline_to_br }}</div>
+        </details>
+      {%- endif -%}
+      {%- if shipping != blank -%}
+        <details class="is-product-story__tab">
+          <summary>{{ block.settings.shipping_label }}</summary>
+          <div class="is-product-story__panel">{{ shipping }}</div>
+        </details>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .is-product-story {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    color: #3a3a3a;
+  }
+  .is-product-story__quote {
+    background: #fff;
+    border-radius: 14px;
+    border-left: 3px solid #c9a86a;
+    padding: 22px 24px;
+    box-shadow: 0 4px 18px rgba(91, 63, 140, 0.06);
+  }
+  .is-product-story__eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 10px;
+  }
+  .is-product-story__text {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .is-product-story__text p {
+    margin: 0 0 0.9em;
+  }
+  .is-product-story__text p:last-child {
+    margin-bottom: 0;
+  }
+  .is-product-story__tabs {
+    border-top: 1px solid #e4d8ee;
+  }
+  .is-product-story__tab {
+    border-bottom: 1px solid #e4d8ee;
+  }
+  .is-product-story__tab summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 2px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #5b3f8c;
+  }
+  .is-product-story__tab summary::-webkit-details-marker {
+    display: none;
+  }
+  .is-product-story__tab summary::after {
+    content: '+';
+    font-size: 20px;
+    font-weight: 400;
+    color: #c9a86a;
+    line-height: 1;
+  }
+  .is-product-story__tab[open] summary::after {
+    content: '−';
+  }
+  .is-product-story__tab summary:focus-visible {
+    outline: 2px solid #8e6bbf;
+    outline-offset: 2px;
+  }
+  .is-product-story__panel {
+    padding: 0 2px 18px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .is-product-story__panel p {
+    margin: 0 0 0.8em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product story & details",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Description label",
+      "default": "Who it's for"
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "paragraph",
+      "content": "Size & fit and Fabric & care come from the product metafields custom.size_fit and custom.fabric_care. Each tab is hidden while empty."
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Size tab title",
+      "default": "Size & fit"
+    },
+    {
+      "type": "text",
+      "id": "fabric_label",
+      "label": "Fabric tab title",
+      "default": "Fabric & care"
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Shipping tab title",
+      "default": "Shipping & returns"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_returns",
+      "label": "Shipping & returns text",
+      "info": "Same for every product. Leave empty to hide the tab."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product story & details"
+    }
+  ]
+}
+{% endschema %}
