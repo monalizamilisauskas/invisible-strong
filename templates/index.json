@@ -116,7 +116,7 @@
         "section_height_custom": 50,
         "background_color": "#f7f2ec",
         "toggle_overlay": true,
-        "overlay_color": "#f7f2ec",
+        "overlay_color": "#f7f2ec8c",
         "overlay_style": "gradient",
         "gradient_direction": "to right",
         "blurred_reflection": false,
