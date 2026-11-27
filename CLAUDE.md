@@ -31,3 +31,7 @@ A dona da loja envia o relato do dia **em português** (do jeito que sair, com o
 4. Lembra de conferir na barra lateral: Blog = Behind the Strength, Modelo = diary, Visível.
 
 O Claude não tem acesso ao painel da Shopify: quem publica é o Sidekick, ou a dona da loja à mão, com o que o Claude prepara.
+
+## Pendências
+
+Ideias e tarefas combinadas para depois ficam em `docs/pendencias.md`. Consulte esse arquivo quando a dona da loja perguntar o que ficou pendente, e atualize-o quando algo for feito ou combinado.
