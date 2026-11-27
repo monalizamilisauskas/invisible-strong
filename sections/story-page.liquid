@@ -1,0 +1,332 @@
+{%- comment -%}
+  "Our Story" page in the Behind the Strength style.
+  Used by templates/page.story.json. The text comes from the page content
+  in the Shopify admin; this section only shapes how it reads.
+{%- endcomment -%}
+
+<article class="is-story" style="--story-bg: {{ section.settings.background_color }};">
+  <header class="is-story__hero">
+    {% render 'diary-butterflies', variant: 'flutter' %}
+    <div class="is-story__hero-inner">
+      {%- if section.settings.image -%}
+        <span class="is-story__avatar">
+          {{
+            section.settings.image
+            | image_url: width: 360
+            | image_tag: loading: 'eager', alt: section.settings.image_alt
+          }}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="is-story__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="is-story__title">{{ section.settings.heading | default: page.title }}</h1>
+      {% render 'diary-butterflies', variant: 'flourish' %}
+      {%- if section.settings.subheading != blank -%}
+        <p class="is-story__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="is-story__inner">
+    <div class="is-story__body{% if section.settings.drop_cap %} is-story__body--dropcap{% endif %}">
+      {{ page.content }}
+    </div>
+
+    {%- if section.settings.signature != blank -%}
+      <p class="is-story__signature">{{ section.settings.signature }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank or section.settings.link_label != blank -%}
+      <div class="is-story__actions">
+        {%- if section.settings.button_label != blank -%}
+          <a class="is-story__btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+            {{- section.settings.button_label -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank -%}
+          <a class="is-story__link" href="{{ section.settings.link_url | default: '/blogs/behind-the-strength' }}">
+            {{- section.settings.link_label }} <span aria-hidden="true">→</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+
+{% stylesheet %}
+  .is-story {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--story-bg, #f7f2ec);
+    color: #3a3a3a;
+    padding-bottom: 96px;
+  }
+  .is-story * {
+    box-sizing: border-box;
+  }
+  .is-story__hero {
+    position: relative;
+    overflow: hidden;
+    padding: 64px 20px 56px;
+    text-align: center;
+    background:
+      radial-gradient(circle at 12% 25%, rgba(201, 168, 106, 0.18), transparent 45%),
+      radial-gradient(circle at 88% 10%, rgba(142, 107, 191, 0.22), transparent 50%),
+      linear-gradient(180deg, #efe7f5 0%, var(--story-bg, #f7f2ec) 100%);
+  }
+  .is-story__hero-inner {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .is-story__avatar {
+    display: block;
+    width: 132px;
+    height: 132px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #c9a86a;
+    box-shadow: 0 10px 30px rgba(91, 63, 140, 0.18);
+  }
+  .is-story__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-story__eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8e6bbf;
+    margin: 0 0 12px;
+  }
+  .is-story__title {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.15;
+    color: #5b3f8c;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .is-story__subheading {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: clamp(19px, 2.2vw, 23px);
+    line-height: 1.5;
+    color: #5b3f8c;
+    margin: 20px auto 0;
+    max-width: 560px;
+  }
+  .is-story__inner {
+    max-width: 65ch;
+    margin: 0 auto;
+    padding: 40px 20px 0;
+    font-size: 19px;
+  }
+  .is-story__body {
+    font-size: 19px;
+    line-height: 1.85;
+  }
+  .is-story__body p {
+    margin: 0 0 1.4em;
+  }
+  .is-story__body > p:first-child {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 1.3em;
+    line-height: 1.5;
+    color: #5b3f8c;
+    margin-bottom: 1.2em;
+  }
+  .is-story__body--dropcap > p:first-child + p::first-letter {
+    float: left;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-size: 4.1em;
+    line-height: 0.82;
+    padding: 0.08em 0.12em 0 0;
+    color: #8e6bbf;
+  }
+  .is-story__body h1,
+  .is-story__body h2,
+  .is-story__body h3 {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-weight: 400;
+    color: #5b3f8c;
+    line-height: 1.3;
+    margin: 2.2em 0 0.9em;
+    text-wrap: balance;
+  }
+  .is-story__body h1,
+  .is-story__body h2 {
+    font-size: clamp(26px, 3vw, 32px);
+    padding-top: 1.4em;
+    border-top: 1px solid #e4d8ee;
+  }
+  .is-story__body h3 {
+    font-size: 23px;
+  }
+  .is-story__body blockquote {
+    margin: 2em 0;
+    padding: 0 0 0 1.2em;
+    border-left: 3px solid #c9a86a;
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 1.15em;
+    line-height: 1.6;
+    color: #5b3f8c;
+  }
+  .is-story__body a {
+    color: #5b3f8c;
+    text-decoration-color: #c9a86a;
+  }
+  .is-story__body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 18px;
+  }
+  .is-story__signature {
+    font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+    font-style: italic;
+    font-size: 26px;
+    color: #5b3f8c;
+    margin: 8px 0 32px;
+  }
+  .is-story__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    padding-top: 32px;
+    border-top: 1px solid #e4d8ee;
+  }
+  .is-story__btn {
+    display: inline-block;
+    background: #8e6bbf;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .is-story__btn:hover {
+    background: #5b3f8c;
+  }
+  .is-story__link {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #5b3f8c;
+    text-decoration: none;
+    border-bottom: 1.5px solid #c9a86a;
+    padding-bottom: 2px;
+  }
+  @media (max-width: 640px) {
+    .is-story__hero {
+      padding: 44px 18px 40px;
+    }
+    .is-story__avatar {
+      width: 108px;
+      height: 108px;
+    }
+    .is-story__inner,
+    .is-story__body {
+      font-size: 18px;
+    }
+    .is-story__inner {
+      padding: 28px 18px 0;
+    }
+    .is-story__actions {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Story page",
+  "tag": "div",
+  "class": "is-story-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description (alt text)",
+      "default": "Monaliza, founder of Invisible Strong"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Meet the founder"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave empty to use the page title."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "drop_cap",
+      "label": "Decorative first letter (second paragraph)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Signature",
+      "default": "With love, Monaliza"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Find Your Piece"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Second link label",
+      "default": "Read the diary"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Second link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f7f2ec"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Story page"
+    }
+  ]
+}
+{% endschema %}
